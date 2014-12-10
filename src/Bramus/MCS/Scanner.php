@@ -242,19 +242,19 @@ class Scanner {
 		// Absolute URLs
 		// --> Don't change
 		if (substr($linkedUrl, 0, 8) == "https://" || substr($linkedUrl, 0, 7) == "http://") {
-			return $linkedUrl;
+			return $this->canonicalize($linkedUrl);
 		}
 
 		// Protocol relative URLs
 		// --> Prepend scheme
 		if (substr($linkedUrl, 0, 2) == "//") {
-			return $this->rootUrlParts['scheme'] . ':' . $linkedUrl;
+			return $this->canonicalize($this->rootUrlParts['scheme'] . ':' . $linkedUrl);
 		}
 
 		// Root-relative URLs
 		// --> Prepend scheme and host
 		if (substr($linkedUrl, 0, 1) == "/") {
-			return $this->rootUrlParts['scheme'] . '://' . $this->rootUrlParts['host'] . '/' . substr($linkedUrl, 1);
+			return $this->canonicalize($this->rootUrlParts['scheme'] . '://' . $this->rootUrlParts['host'] . '/' . substr($linkedUrl, 1));
 		}
 
 		// Document fragment
@@ -272,8 +272,30 @@ class Scanner {
 
 		// Document-relative URLs
 		// --> Append $linkedUrl to $pageUrlContainingTheLinkedUrl's PATH
-		return substr($pageUrlContainingTheLinkedUrl, 0, strrpos($pageUrlContainingTheLinkedUrl, '/')) . '/' . $linkedUrl;
+		return $this->canonicalize(substr($pageUrlContainingTheLinkedUrl, 0, strrpos($pageUrlContainingTheLinkedUrl, '/')) . '/' . $linkedUrl);
 
+	}
+
+
+	/**
+	 * Remove ../ and ./ from a given URL
+	 * @see  http://php.net/manual/en/function.realpath.php#71334
+	 * @param  String
+	 * @return String
+	 */
+	private function canonicalize($url) {
+
+		$url = explode('/', $url);
+		$keys = array_keys($url, '..');
+
+		foreach($keys AS $keypos => $key) {
+			array_splice($url, $key - ($keypos * 2 + 1), 2);
+		}
+
+		$url = implode('/', $url);
+		$url = str_replace('./', '', $url);
+
+		return $url;
 	}
 
 
