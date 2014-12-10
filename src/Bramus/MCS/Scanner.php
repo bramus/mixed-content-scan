@@ -259,6 +259,12 @@ class Scanner {
 			return '';
 		}
 
+		// Links that are not http or https (e.g. mailto:, tel:)
+		// --> Don't scan it
+		if (!in_array(parse_url($linkedUrl)['scheme'], array('http','https',''))) {
+			return '';
+		}
+
 		// Document-relative URLs
 		// --> Append $linkedUrl to $pageUrlContainingTheLinkedUrl's PATH
 		return substr($pageUrlContainingTheLinkedUrl, 0, strrpos($pageUrlContainingTheLinkedUrl, '/')) . '/' . $linkedUrl;
