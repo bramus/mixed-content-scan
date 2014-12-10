@@ -110,6 +110,8 @@ return [
 ];
 ```
 
+The `{$rootUrl}` token in each pattern will be replaced with the (root) URL passed into the script.
+
 Note: The [PHP PCRE Cheat Sheet](https://www.cs.washington.edu/education/courses/190m/12sp/cheat-sheets/php-regex-cheat-sheet.pdf) might come in handy.
 
 ## Known issues
