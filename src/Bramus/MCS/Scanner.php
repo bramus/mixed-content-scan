@@ -260,20 +260,8 @@ class Scanner {
 		}
 
 		// Document-relative URLs
-		// --> Prepend the URL of the page containing the linked URL
-		if (!parse_url($linkedUrl)) {
-
-			// Force trailing slash on $pageUrlContainingTheLinkedUrl
-			if (substr($pageUrlContainingTheLinkedUrl, -1) != '/') $pageUrlContainingTheLinkedUrl .= '/';
-
-			// Append $linkedUrl to $pageUrlContainingTheLinkedUrl
-			return $pageUrlContainingTheLinkedUrl . $linkedUrl;
-
-		}
-
-		// Would be strange if we ever got here, but hey ...
-		return '';
-
+		// --> Append $linkedUrl to $pageUrlContainingTheLinkedUrl's PATH
+		return substr($pageUrlContainingTheLinkedUrl, 0, strrpos($pageUrlContainingTheLinkedUrl, '/')) . '/' . $linkedUrl;
 
 	}
 
