@@ -261,7 +261,8 @@ class Scanner {
 
 		// Links that are not http or https (e.g. mailto:, tel:)
 		// --> Don't scan it
-		if (!in_array(parse_url($linkedUrl)['scheme'], array('http','https',''))) {
+		$linkedUrlParts = parse_url($linkedUrl);
+		if (isset($linkedUrlParts['scheme']) && !in_array($linkedUrlParts['scheme'], array('http','https',''))) {
 			return '';
 		}
 
