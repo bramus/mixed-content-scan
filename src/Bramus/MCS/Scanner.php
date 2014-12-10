@@ -265,6 +265,7 @@ class Scanner {
 
 		@curl_setopt_array($curl, array(
 			CURLOPT_RETURNTRANSFER => 1,
+			CURLOPT_FOLLOWLOCATION => 1,
 			CURLOPT_URL => $url,
 			CURLOPT_TIMEOUT_MS => 10000
 		));
