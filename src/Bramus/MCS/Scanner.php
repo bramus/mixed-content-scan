@@ -28,14 +28,14 @@ class Scanner {
 	 * @var  Array
 	 */
 	private $ignorePatterns = [];
-	
+
 
 	/**
 	 * Create a new Scanner instance.
 	 * @param String $rootUrl The (root)URL to start scanning
 	 */
 	public function __construct($rootUrl, $ignorePatterns) {
-		
+
 		// Force trailing / on rootUrl
 		if (substr($rootUrl, -1) != '/') $rootUrl .= '/';
 
@@ -63,7 +63,7 @@ class Scanner {
 
 		// Give feedback on the CLI
 		echo 'Scanning ' . $this->rootUrl . PHP_EOL;
-		
+
 		// Current index at $this->pages
 		$curPageIndex = 0;
 
@@ -99,7 +99,7 @@ class Scanner {
 
 
 	/**
-	 * Scan a single URL 
+	 * Scan a single URL
 	 * @param  String $pageUrl 	URL of the page to scan
 	 * @return array
 	 */
@@ -119,7 +119,7 @@ class Scanner {
 			// Loop all links found
 			foreach ($doc->getElementsByTagName('a') as $el) {
 				if ($el->hasAttribute('href')) {
-					
+
 					// Normalize the URL first so that it's an absolute URL.
 					$url = $this->normalizeUrl($el->getAttribute('href'), $pageUrl);
 
@@ -174,10 +174,20 @@ class Scanner {
 				}
 			}
 
-			// Check all css links contained in the HTML
+			// Check all stylesheet links contained in the HTML
 			foreach ($doc->getElementsByTagName('link') as $el) {
 				if ($el->hasAttribute('href') && $el->hasAttribute('rel') && ($el->getAttribute('rel') == 'stylesheet')) {
 					$url = $this->normalizeUrl($el->getAttribute('href'), $pageUrl);
+					if (substr($url, 0, 7) == "http://") {
+						$mixedContentUrls[] = $url;
+					}
+				}
+			}
+
+			// Check all `object` elements contained in the HTML
+			foreach ($doc->getElementsByTagName('object') as $el) {
+				if ($el->hasAttribute('data')) {
+					$url = $this->normalizeUrl($el->getAttribute('data'), $pageUrl);
 					if (substr($url, 0, 7) == "http://") {
 						$mixedContentUrls[] = $url;
 					}
@@ -231,7 +241,7 @@ class Scanner {
 			// Force trailing slash on $pageUrlContainingTheLinkedUrl
 			if (substr($pageUrlContainingTheLinkedUrl, -1) != '/') $pageUrlContainingTheLinkedUrl .= '/';
 
-			// Append $linkedUrl to $pageUrlContainingTheLinkedUrl			
+			// Append $linkedUrl to $pageUrlContainingTheLinkedUrl
 			return $pageUrlContainingTheLinkedUrl . $linkedUrl;
 
 		}
@@ -268,7 +278,7 @@ class Scanner {
 		if ($curl_errno > 0) {
 			echo ' - cURL Error (' . $curl_errno . '): ' . $curl_error . PHP_EOL;
 		}
-		
+
 		// Close it
 		@curl_close($curl);
 
