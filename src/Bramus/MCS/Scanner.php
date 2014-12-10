@@ -54,7 +54,10 @@ class Scanner {
 		if (substr($rootUrl, -1) != '/') $rootUrl .= '/';
 
 		// store rootUrl
-		$this->rootUrl = $rootUrl;
+		$this->rootUrl = strstr($rootUrl, '?') ? substr($rootUrl, 0, strpos($rootUrl, '?')) : $rootUrl;
+
+		// store rootUrl without queryString
+		$this->rootUrlBasePath = substr($this->rootUrl, 0, strrpos($this->rootUrl, '/') + 1);
 
 		// store urlParts
 		$this->rootUrlParts = $urlParts;
@@ -152,7 +155,8 @@ class Scanner {
 					if (strpos($url, '#')) $url = substr($url, 0, strpos($url, '#'));
 
 					// If the URL should not be ignored (pattern matching) and isn't added to the list yet, add it to the list of pages to scan.
-					if ((preg_match('#^' . $this->rootUrl . '#i', $url) === 1) && !in_array($url, $this->pages)) {
+					if ((preg_match('#^' . $this->rootUrlBasePath . '#i', $url) === 1) && !in_array($url, $this->pages)) {
+						
 						$ignorePatternMatched = false;
 						foreach ($this->ignorePatterns as $p) {
 							if ($p && preg_match('#' . $p . '#i', $url)) {
