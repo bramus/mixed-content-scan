@@ -319,11 +319,16 @@ class Scanner {
 		// Fetch the page contents
 		$resp = curl_exec($curl);
 
-		// If we started at the rootURL, and it got redirected:
-		// --> overwrite the rootUrl so that we use the new one from now on
-		if ($pageUrl == $this->rootUrl) {
-			$newUrl = curl_getinfo($curl, CURLINFO_EFFECTIVE_URL);
-			if ($newUrl && ($newUrl != $pageUrl)) {
+		// Fetch the URL of the page we actually fetched
+		$newUrl = curl_getinfo($curl, CURLINFO_EFFECTIVE_URL);
+
+		if ($newUrl != $pageUrl) {
+			
+			// echo ' >> ' . $newUrl . PHP_EOL;
+
+			// If we started at the rootURL, and it got redirected:
+			// --> overwrite the rootUrl so that we use the new one from now on
+			if ($pageUrl == $this->rootUrl) {
 
 				// Store the new rootUrl
 				$this->setRootUrl($newUrl);
@@ -332,10 +337,10 @@ class Scanner {
 				// Update ignore patterns
 				$this->setIgnorePatterns($this->ignorePatterns, $pageUrl);
 
-				// Update $pageUrl (pass by reference!)
-				$pageUrl = $newUrl;
-
 			}
+
+			// Update $pageUrl (pass by reference!)
+			$pageUrl = $newUrl;
 
 		}
 
