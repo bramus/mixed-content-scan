@@ -176,7 +176,7 @@ class Scanner {
 
 			// Check all css links contained in the HTML
 			foreach ($doc->getElementsByTagName('link') as $el) {
-				if ($el->hasAttribute('href') && $el->hasAttribute('type') && ($el->getAttribute('type') == 'text/css')) {
+				if ($el->hasAttribute('href') && $el->hasAttribute('rel') && ($el->getAttribute('rel') == 'stylesheet')) {
 					$url = $this->normalizeUrl($el->getAttribute('href'), $pageUrl);
 					if (substr($url, 0, 7) == "http://") {
 						$mixedContentUrls[] = $url;
