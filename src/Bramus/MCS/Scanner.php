@@ -172,7 +172,7 @@ class Scanner {
 			// Check all iframes contained in the HTML
 			foreach ($doc->getElementsByTagName('iframe') as $el) {
 				if ($el->hasAttribute('src')) {
-					$url = $this->normalizeUrl($el->getAttribute('src'), $pageUrl);
+					$url = $el->getAttribute('src');
 					if (substr($url, 0, 7) == "http://") {
 						$mixedContentUrls[] = $url;
 					}
@@ -182,7 +182,7 @@ class Scanner {
 			// Check all images contained in the HTML
 			foreach ($doc->getElementsByTagName('img') as $el) {
 				if ($el->hasAttribute('src')) {
-					$url = $this->normalizeUrl($el->getAttribute('src'), $pageUrl);
+					$url = $el->getAttribute('src');
 					if (substr($url, 0, 7) == "http://") {
 						$mixedContentUrls[] = $url;
 					}
@@ -192,7 +192,7 @@ class Scanner {
 			// Check all script elements contained in the HTML
 			foreach ($doc->getElementsByTagName('script') as $el) {
 				if ($el->hasAttribute('src')) {
-					$url = $this->normalizeUrl($el->getAttribute('src'), $pageUrl);
+					$url = $el->getAttribute('src');
 					if (substr($url, 0, 7) == "http://") {
 						$mixedContentUrls[] = $url;
 					}
@@ -202,7 +202,7 @@ class Scanner {
 			// Check all stylesheet links contained in the HTML
 			foreach ($doc->getElementsByTagName('link') as $el) {
 				if ($el->hasAttribute('href') && $el->hasAttribute('rel') && ($el->getAttribute('rel') == 'stylesheet')) {
-					$url = $this->normalizeUrl($el->getAttribute('href'), $pageUrl);
+					$url = $el->getAttribute('href');
 					if (substr($url, 0, 7) == "http://") {
 						$mixedContentUrls[] = $url;
 					}
@@ -212,7 +212,7 @@ class Scanner {
 			// Check all `object` elements contained in the HTML
 			foreach ($doc->getElementsByTagName('object') as $el) {
 				if ($el->hasAttribute('data')) {
-					$url = $this->normalizeUrl($el->getAttribute('data'), $pageUrl);
+					$url = $el->getAttribute('data');
 					if (substr($url, 0, 7) == "http://") {
 						$mixedContentUrls[] = $url;
 					}
