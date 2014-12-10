@@ -36,19 +36,44 @@ class Scanner {
 	 */
 	public function __construct($rootUrl, $ignorePatterns) {
 
-		// Force trailing / on rootUrl
+		// Store the rootUrl
+		$this->setRootUrl($rootUrl);
+
+		// store the ignorePatterns
+		$this->setIgnorePatterns($ignorePatterns, '{$rootUrl}');
+
+	}
+
+	private function setRootUrl($rootUrl) {
+
+		// Make sure the rootUrl is parse-able
+		$urlParts = parse_url($rootUrl);
+		if (!$urlParts) exit('Invalid rootUrl!');
+
+		// Force trailing / on rootUrl, it's easier for us to work with it
 		if (substr($rootUrl, -1) != '/') $rootUrl .= '/';
 
 		// store rootUrl
 		$this->rootUrl = $rootUrl;
+
+		// store urlParts
+		$this->rootUrlParts = $urlParts;
+
+	}
+
+	private function setIgnorePatterns($ignorePatterns, $toReplace = '{$rootUrl}') {
+
+		// Force trailing / on $toReplace
+		if (substr($toReplace, -1) != '/') $toReplace .= '/';
 
 		// Store ignorepatterns
 		$this->ignorePatterns = (array) $ignorePatterns;
 
 		// Replace {$rootUrl} in the ignorepatterns
 		foreach ($this->ignorePatterns as &$p) {
-			$p = str_replace('{$rootUrl}/', $this->rootUrl, $p);
+			$p = str_replace($toReplace, $this->rootUrl, $p);
 		}
+
 	}
 
 
@@ -217,15 +242,15 @@ class Scanner {
 		}
 
 		// Protocol relative URLs
-		// --> Prepend protocol
+		// --> Prepend scheme
 		if (substr($linkedUrl, 0, 2) == "//") {
-			return 'https:' . $linkedUrl;
+			return $this->rootUrlParts['scheme'] . ':' . $linkedUrl;
 		}
 
 		// Root-relative URLs
-		// --> Prepend Root URL
+		// --> Prepend scheme and host
 		if (substr($linkedUrl, 0, 1) == "/") {
-			return $this->rootUrl . substr($linkedUrl, 1);
+			return $this->rootUrlParts['scheme'] . '://' . $this->rootUrlParts['host'] . '/' . substr($linkedUrl, 1);
 		}
 
 		// Document fragment
@@ -255,10 +280,10 @@ class Scanner {
 
 	/**
 	 * Get the contents of a given URL (via GET)
-	 * @param  String $url 	The URL of the page to get the contents of
+	 * @param  String $pageUrl 	The URL of the page to get the contents of
 	 * @return String
 	 */
-	private function getContents($url) {
+	private function getContents(&$pageUrl) {
 
 		// Init CURL
 		$curl = curl_init();
@@ -266,12 +291,32 @@ class Scanner {
 		@curl_setopt_array($curl, array(
 			CURLOPT_RETURNTRANSFER => 1,
 			CURLOPT_FOLLOWLOCATION => 1,
-			CURLOPT_URL => $url,
+			CURLOPT_URL => $pageUrl,
 			CURLOPT_TIMEOUT_MS => 10000
 		));
 
 		// Fetch the page contents
 		$resp = curl_exec($curl);
+
+		// If we started at the rootURL, and it got redirected:
+		// --> overwrite the rootUrl so that we use the new one from now on
+		if ($pageUrl == $this->rootUrl) {
+			$newUrl = curl_getinfo($curl, CURLINFO_EFFECTIVE_URL);
+			if ($newUrl && ($newUrl != $pageUrl)) {
+
+				// Store the new rootUrl
+				$this->setRootUrl($newUrl);
+				echo ' > Updated rootUrl to ' . $this->rootUrl . PHP_EOL;
+				
+				// Update ignore patterns
+				$this->setIgnorePatterns($this->ignorePatterns, $pageUrl);
+
+				// Update $pageUrl (pass by reference!)
+				$pageUrl = $newUrl;
+
+			}
+
+		}
 
 		// Got an error?
 		$curl_errno = curl_errno($curl);
