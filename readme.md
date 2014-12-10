@@ -9,7 +9,7 @@ Built by Bramus! - [https://www.bram.us/](https://www.bram.us/)
 
 The script starts at a given URL, and then starts processing it:
 
-*  All contained `img[src]`, `iframe[src]`, `script[src]`, and `link[href][rel="stylesheet"]` elements are checked for being Mixed Content or not
+*  All contained `img[src]`, `iframe[src]`, `script[src]`, and `link[href][rel="stylesheet"]`, and `object[data]` elements are checked for being Mixed Content or not
 *  All contained `a[href]` elements linking to the same or a deeper level are successively processed for Mixed Content.
 
 ## Usage
