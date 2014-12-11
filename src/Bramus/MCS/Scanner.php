@@ -44,7 +44,7 @@ class Scanner {
 
 	}
 
-	private function setRootUrl($rootUrl) {
+	private function setRootUrl($rootUrl, $limitToPath = true) {
 
 		// Make sure the rootUrl is parse-able
 		$urlParts = parse_url($rootUrl);
@@ -57,7 +57,14 @@ class Scanner {
 		$this->rootUrl = strstr($rootUrl, '?') ? substr($rootUrl, 0, strpos($rootUrl, '?')) : $rootUrl;
 
 		// store rootUrl without queryString
-		$this->rootUrlBasePath = substr($this->rootUrl, 0, strrpos($this->rootUrl, '/') + 1);
+		// If we need to limit to the path of the URL (viz. at first run): take that one into account
+		// Otherwise keep the already set path
+		$this->rootUrlBasePath = $urlParts['scheme'] . '://' . $urlParts['host'] . ($limitToPath ? $urlParts['path'] : $this->rootUrlParts['path']);
+		
+		if (!$limitToPath) {
+			echo ' > Updated rootUrl to ' . $this->rootUrl . PHP_EOL;
+			echo ' > Updated rootUrlBasePath to ' . $this->rootUrlBasePath . PHP_EOL;
+		}
 
 		// store urlParts
 		$this->rootUrlParts = $urlParts;
@@ -331,8 +338,7 @@ class Scanner {
 			if ($pageUrl == $this->rootUrl) {
 
 				// Store the new rootUrl
-				$this->setRootUrl($newUrl);
-				echo ' > Updated rootUrl to ' . $this->rootUrl . PHP_EOL;
+				$this->setRootUrl($newUrl, false);
 				
 				// Update ignore patterns
 				$this->setIgnorePatterns($this->ignorePatterns, $pageUrl);
