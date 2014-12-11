@@ -13,6 +13,7 @@
  * 
  */
 return [
+	'\.(jpg|jpeg|png|gif|zip|pdf)$',
 	'^{$rootUrl}/page/(\d+)/$', // Paginated Overview Links
 	// '^{$rootUrl}/(\d+)/(\d+)/', // Single Post Links
 	'^{$rootUrl}/tag/', // Tag Overview Links
