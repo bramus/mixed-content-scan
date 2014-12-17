@@ -231,10 +231,20 @@ class Scanner {
 			}
 
 		}
+	}
 
 		// Return the array of Mixed Content
 		return $mixedContentUrls;
 
+	/**
+	 * Queue an array of URLs
+	 * @param  array
+	 * @return void
+	 */
+	public function queueUrls(array $urls) {
+		foreach ($urls as $url) {
+			$this->queueUrl($url);
+		}
 	}
 
 
