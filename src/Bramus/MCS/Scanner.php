@@ -156,7 +156,7 @@ class Scanner {
 				if ($el->hasAttribute('href')) {
 
 					// Normalize the URL first so that it's an absolute URL.
-					$url = $this->normalizeUrl($el->getAttribute('href'), $pageUrl);
+					$url = $this->absolutizeUrl($el->getAttribute('href'), $pageUrl);
 
 					// Queue the URL
 					$this->queueUrl($url);
@@ -256,12 +256,12 @@ class Scanner {
 
 
 	/**
-	 * Normalizes a URL to become an absolute URL
+	 * Make a given URL absolute
 	 * @param  String $linkedUrl	The URL linked to
-	 * @param  String $pageUrlContainingTheLinkedUrl	The URL of the page holding the URL linked to
+	 * @param  String $currentPageUrl	The URL of the page holding the URL linked to
 	 * @return String
 	 */
-	private function normalizeUrl($linkedUrl, $pageUrlContainingTheLinkedUrl) {
+	private function absolutizeUrl($linkedUrl, $currentPageUrl) {
 
 		// Absolute URLs
 		// --> Don't change
@@ -295,8 +295,8 @@ class Scanner {
 		}
 
 		// Document-relative URLs
-		// --> Append $linkedUrl to $pageUrlContainingTheLinkedUrl's PATH
-		return $this->canonicalize(substr($pageUrlContainingTheLinkedUrl, 0, strrpos($pageUrlContainingTheLinkedUrl, '/')) . '/' . $linkedUrl);
+		// --> Append $linkedUrl to $currentPageUrl's PATH
+		return $this->canonicalize(substr($currentPageUrl, 0, strrpos($currentPageUrl, '/')) . '/' . $linkedUrl);
 
 	}
 
