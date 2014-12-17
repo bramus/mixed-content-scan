@@ -11,6 +11,13 @@ class Scanner {
 
 
 	/**
+	 * Do we need to crawl pages or not?
+	 * @var boolean
+	 */
+	private $crawl = true;
+
+
+	/**
 	 * The root URL to start scanning at
 	 * @var String
 	 */
@@ -22,6 +29,7 @@ class Scanner {
 	 * @var Array
 	 */
 	private $pages = [];
+
 
 	/**
 	 * Array of patterns in URLs to ignore to fetch content from
@@ -44,6 +52,12 @@ class Scanner {
 
 	}
 
+
+	/**
+	 * Sets the root URL of the website to scan
+	 * @param String
+	 * @param boolean
+	 */
 	private function setRootUrl($rootUrl, $limitToPath = true) {
 
 		// Make sure the rootUrl is parse-able
@@ -151,16 +165,18 @@ class Scanner {
 		$doc = new \DOMDocument();
 		if ($doc->loadHTML($html)) {
 
-			// Loop all links found
-			foreach ($doc->getElementsByTagName('a') as $el) {
-				if ($el->hasAttribute('href')) {
+			// Craling enabled? Loop all links found and queue 'm
+			if ($this->crawl) {
+				foreach ($doc->getElementsByTagName('a') as $el) {
+					if ($el->hasAttribute('href')) {
 
-					// Normalize the URL first so that it's an absolute URL.
-					$url = $this->absolutizeUrl($el->getAttribute('href'), $pageUrl);
+						// Normalize the URL first so that it's an absolute URL.
+						$url = $this->absolutizeUrl($el->getAttribute('href'), $pageUrl);
 
-					// Queue the URL
-					$this->queueUrl($url);
+						// Queue the URL
+						$this->queueUrl($url);
 
+					}
 				}
 			}
 
@@ -380,6 +396,24 @@ class Scanner {
 		// Return the fetched contents
 		return $resp;
 
+	}
+
+
+	/**
+	 * Get crawl value
+	 * @return boolean
+	 */
+	public function getCrawl() {
+		return $this->crawl;
+	}
+
+
+	/**
+	 * Set crawl value
+	 * @param boolean
+	 */
+	public function setCrawl($crawl) {
+		$this->crawl = (bool) $crawl;
 	}
 
 }
