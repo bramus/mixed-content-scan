@@ -20,6 +20,7 @@ if ($argc != 2 || !parse_url($argv[1])) exit('Please use a valid URL you wish to
 
 // Require needed Scanner class
 require __DIR__ . '/../src/Bramus/MCS/Scanner.php';
+require __DIR__ . '/../src/Bramus/MCS/DOMDocument.php';
 
 // Get ignorepatterns
 $ignorePatterns = include __DIR__ . '/../conf/ignorePatterns.php';

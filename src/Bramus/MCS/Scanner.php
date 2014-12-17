@@ -154,87 +154,42 @@ class Scanner {
 	 */
 	private function scanPage($pageUrl) {
 
-		// Array holding all URLs which are found to be Mixed Content
-		// We'll return this one at the very end
-		$mixedContentUrls = [];
-
 		// Get the HTML of the page
 		$html = $this->getContents($pageUrl);
 
 		// Create new DOMDocument using the fetched HTML
-		$doc = new \DOMDocument();
+		// (explicitly adding \Bramus\MCS\ to indicate the difference with \DOMDocuemnt)
+		$doc = new \Bramus\MCS\DOMDocument();
+
+		// Load up the HTML
 		if ($doc->loadHTML($html)) {
 
-			// Craling enabled? Loop all links found and queue 'm
+			// Crawling enabled? Extract all links and queue all those found
 			if ($this->crawl) {
-				foreach ($doc->getElementsByTagName('a') as $el) {
-					if ($el->hasAttribute('href')) {
 
-						// Normalize the URL first so that it's an absolute URL.
-						$url = $this->absolutizeUrl($el->getAttribute('href'), $pageUrl);
+				// Extract the links
+				$links = (array) $doc->extractLinks();
 
-						// Queue the URL
-						$this->queueUrl($url);
+				// Absolutize all links
+				array_walk($links, function(&$url) use ($pageUrl) {
+					$url = $this->absolutizeUrl($url, $pageUrl);
+				});
 
-					}
-				}
+				// (Try to) Queue 'm
+				$this->queueUrls($links);
+
 			}
 
-			// Check all iframes contained in the HTML
-			foreach ($doc->getElementsByTagName('iframe') as $el) {
-				if ($el->hasAttribute('src')) {
-					$url = $el->getAttribute('src');
-					if (substr($url, 0, 7) == "http://") {
-						$mixedContentUrls[] = $url;
-					}
-				}
-			}
-
-			// Check all images contained in the HTML
-			foreach ($doc->getElementsByTagName('img') as $el) {
-				if ($el->hasAttribute('src')) {
-					$url = $el->getAttribute('src');
-					if (substr($url, 0, 7) == "http://") {
-						$mixedContentUrls[] = $url;
-					}
-				}
-			}
-
-			// Check all script elements contained in the HTML
-			foreach ($doc->getElementsByTagName('script') as $el) {
-				if ($el->hasAttribute('src')) {
-					$url = $el->getAttribute('src');
-					if (substr($url, 0, 7) == "http://") {
-						$mixedContentUrls[] = $url;
-					}
-				}
-			}
-
-			// Check all stylesheet links contained in the HTML
-			foreach ($doc->getElementsByTagName('link') as $el) {
-				if ($el->hasAttribute('href') && $el->hasAttribute('rel') && ($el->getAttribute('rel') == 'stylesheet')) {
-					$url = $el->getAttribute('href');
-					if (substr($url, 0, 7) == "http://") {
-						$mixedContentUrls[] = $url;
-					}
-				}
-			}
-
-			// Check all `object` elements contained in the HTML
-			foreach ($doc->getElementsByTagName('object') as $el) {
-				if ($el->hasAttribute('data')) {
-					$url = $el->getAttribute('data');
-					if (substr($url, 0, 7) == "http://") {
-						$mixedContentUrls[] = $url;
-					}
-				}
-			}
+			// Extract mixedContent and return it
+			return $doc->extractMixedContentUrls();
 
 		}
+
+		// No result
+		return [];
+
 	}
 
-		// Return the array of Mixed Content
-		return $mixedContentUrls;
 
 	/**
 	 * Queue an array of URLs
