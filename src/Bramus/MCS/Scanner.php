@@ -243,7 +243,7 @@ class Scanner {
 	 * @param  String 
 	 * @return bool
 	 */
-	private function queueUrl($url) {
+	public function queueUrl($url) {
 
 		// Remove fragment from URL (if any)
 		if (strpos($url, '#')) $url = substr($url, 0, strpos($url, '#'));
