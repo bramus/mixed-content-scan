@@ -18,6 +18,13 @@ class Scanner {
 
 
 	/**
+	 * Logger
+	 * @var Object
+	 */
+	private $logger;
+
+
+	/**
 	 * The root URL to start scanning at
 	 * @var String
 	 */
@@ -42,10 +49,13 @@ class Scanner {
 	 * Create a new Scanner instance.
 	 * @param String $rootUrl The (root)URL to start scanning
 	 */
-	public function __construct($rootUrl, $ignorePatterns) {
+	public function __construct($rootUrl, $logger, $ignorePatterns) {
 
 		// Store the rootUrl
 		$this->setRootUrl($rootUrl);
+
+		// Store logger
+		$this->logger = $logger;
 
 		// store the ignorePatterns
 		$this->setIgnorePatterns($ignorePatterns, '{$rootUrl}');
@@ -62,7 +72,10 @@ class Scanner {
 
 		// Make sure the rootUrl is parse-able
 		$urlParts = parse_url($rootUrl);
-		if (!$urlParts) exit('Invalid rootUrl!');
+		if (!$urlParts) {
+			$this->logger->addEmergency('Invalid rootUrl!');
+			exit();
+		}
 
 		// Force trailing / on rootUrl, it's easier for us to work with it
 		if (substr($rootUrl, -1) != '/') $rootUrl .= '/';
@@ -76,8 +89,8 @@ class Scanner {
 		$this->rootUrlBasePath = $urlParts['scheme'] . '://' . $urlParts['host'] . ($limitToPath ? $urlParts['path'] : $this->rootUrlParts['path']);
 		
 		if (!$limitToPath) {
-			echo ' > Updated rootUrl to ' . $this->rootUrl . PHP_EOL;
-			echo ' > Updated rootUrlBasePath to ' . $this->rootUrlBasePath . PHP_EOL;
+			$this->logger->addNotice('Updated rootUrl to ' . $this->rootUrl);
+			$this->logger->addNotice('Updated rootUrlBasePath to ' . $this->rootUrlBasePath);
 		}
 
 		// store urlParts
@@ -91,11 +104,13 @@ class Scanner {
 		if (substr($toReplace, -1) != '/') $toReplace .= '/';
 
 		// Store ignorepatterns
+		$this->logger->addDebug('Store ignore patterns ' . $p);
 		$this->ignorePatterns = (array) $ignorePatterns;
 
 		// Replace {$rootUrl} in the ignorepatterns
 		foreach ($this->ignorePatterns as &$p) {
 			$p = str_replace($toReplace, $this->rootUrl, $p);
+			$this->logger->addDebug('Add ignore pattern ' . $p);
 		}
 
 	}
@@ -111,7 +126,7 @@ class Scanner {
 		$this->pages[] = $this->rootUrl;
 
 		// Give feedback on the CLI
-		echo 'Scanning ' . $this->rootUrl . PHP_EOL;
+		$this->logger->addNotice('Scanning ' . $this->rootUrl);
 
 		// Current index at $this->pages
 		$curPageIndex = 0;
@@ -122,17 +137,23 @@ class Scanner {
 			// Get the current pageUrl
 			$curPageUrl = $this->pages[$curPageIndex];
 
-			// Give feedback on the CLI
-			echo '[' . date('Y-m-d H:i:s') . '] ' . sprintf('%05d', $curPageIndex) . ' - ' . $curPageUrl . PHP_EOL;
-
 			// Scan a single page. Returns the mixed content (if any)
 			$mixedContent = $this->scanPage($curPageUrl);
 
-			// Got mixed content? Give feedback on the CLI
+			// Got mixed content
 			if ($mixedContent) {
+
+				// Add an alert for the URL
+				$this->logger->addError(sprintf('%05d', $curPageIndex) . ' - ' . $curPageUrl);
+
 				foreach ($mixedContent as $url) {
-					echo '  - ' . $url . PHP_EOL;
+					$this->logger->addWarning($url);
 				}
+			}
+
+			// No mixed content
+			else {
+				$this->logger->addInfo(sprintf('%05d', $curPageIndex) . ' - ' . $curPageUrl);
 			}
 
 			// Done scanning all pages? Then quit! Otherwise: scan the next page
@@ -142,7 +163,7 @@ class Scanner {
 		}
 
 		// Give feedback on the CLI
-		echo 'Scanned ' . sizeof($this->pages) . ' pages for Mixed Content' . PHP_EOL;
+		$this->logger->addNotice('Scanned ' . sizeof($this->pages) . ' pages for Mixed Content');
 
 	}
 
@@ -226,6 +247,7 @@ class Scanner {
 
 			if (!$ignorePatternMatched) {
 				$this->pages[] = $url;
+				$this->logger->addDebug('Queued ' . $url);
 				return true;
 			}
 		}
@@ -328,8 +350,6 @@ class Scanner {
 		$newUrl = curl_getinfo($curl, CURLINFO_EFFECTIVE_URL);
 
 		if ($newUrl != $pageUrl) {
-			
-			// echo ' >> ' . $newUrl . PHP_EOL;
 
 			// If we started at the rootURL, and it got redirected:
 			// --> overwrite the rootUrl so that we use the new one from now on
@@ -352,7 +372,7 @@ class Scanner {
 		$curl_errno = curl_errno($curl);
 		$curl_error = curl_error($curl);
 		if ($curl_errno > 0) {
-			echo ' - cURL Error (' . $curl_errno . '): ' . $curl_error . PHP_EOL;
+			$this->logger->addCritical('cURL Error (' . $curl_errno . '): ' . $curl_error);
 		}
 
 		// Close it

@@ -25,6 +25,12 @@ if ($argc != 2 || !parse_url($argv[1])) exit('Please use a valid URL you wish to
 // Get ignorepatterns
 $ignorePatterns = include __DIR__ . '/../conf/ignorePatterns.php';
 
+// Create logger
+$logger = new \Monolog\Logger('MCS');
+$handler = new \Monolog\Handler\StreamHandler('php://stdout', 200);
+$handler->setFormatter(new \Bramus\Monolog\Formatter\ColoredLineFormatter());
+$logger->pushHandler($handler);
+
 // Go for it!
-$scanner = new \Bramus\MCS\Scanner($argv[1], (array) $ignorePatterns);
+$scanner = new \Bramus\MCS\Scanner($argv[1], $logger, (array) $ignorePatterns);
 $scanner->scan();
