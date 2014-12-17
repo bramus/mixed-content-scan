@@ -158,24 +158,8 @@ class Scanner {
 					// Normalize the URL first so that it's an absolute URL.
 					$url = $this->normalizeUrl($el->getAttribute('href'), $pageUrl);
 
-					// Remove fragment from URL (if any)
-					if (strpos($url, '#')) $url = substr($url, 0, strpos($url, '#'));
-
-					// If the URL should not be ignored (pattern matching) and isn't added to the list yet, add it to the list of pages to scan.
-					if ((preg_match('#^' . $this->rootUrlBasePath . '#i', $url) === 1) && !in_array($url, $this->pages)) {
-						
-						$ignorePatternMatched = false;
-						foreach ($this->ignorePatterns as $p) {
-							if ($p && preg_match('#' . $p . '#i', $url)) {
-								$ignorePatternMatched = true;
-								// echo ' - ignoring ' . $url . PHP_EOL;
-								break;
-							}
-						}
-						if (!$ignorePatternMatched) {
-							$this->pages[] = $url;
-						}
-					}
+					// Queue the URL
+					$this->queueUrl($url);
 
 				}
 			}
@@ -234,6 +218,39 @@ class Scanner {
 
 		// Return the array of Mixed Content
 		return $mixedContentUrls;
+
+	}
+
+
+	/**
+	 * Queues an URL onto the queue if not queued yet
+	 * @param  String 
+	 * @return bool
+	 */
+	private function queueUrl($url) {
+
+		// Remove fragment from URL (if any)
+		if (strpos($url, '#')) $url = substr($url, 0, strpos($url, '#'));
+
+		// If the URL should not be ignored (pattern matching) and isn't added to the list yet, add it to the list of pages to scan.
+		if ((preg_match('#^' . $this->rootUrlBasePath . '#i', $url) === 1) && !in_array($url, $this->pages)) {
+			
+			$ignorePatternMatched = false;
+			foreach ($this->ignorePatterns as $p) {
+				if ($p && preg_match('#' . $p . '#i', $url)) {
+					$ignorePatternMatched = true;
+					return false;
+				}
+			}
+
+			if (!$ignorePatternMatched) {
+				$this->pages[] = $url;
+				return true;
+			}
+		}
+
+		// Not queued
+		return false;
 
 	}
 
