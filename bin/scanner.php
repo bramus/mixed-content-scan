@@ -9,8 +9,8 @@
  */
 
 // Error settings
-error_reporting(E_PARSE & E_NOTICE);
-ini_set('display_errors', 'off');
+error_reporting(E_ERROR);
+ini_set('display_errors', 'on');
 
 // Check if we're at the CLI
 if (php_sapi_name() != 'cli') exit('Please run this file on the command line. E.g. `php bin/scanner.php $url`' . PHP_EOL);
