@@ -1,0 +1,20 @@
+{
+    "name": "bramus/mixed-content-scan",
+    "description": "Scan your HTTPS-enabled website for Mixed Content",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Bramus Van Damme",
+            "email": "bramus@bram.us",
+            "homepage": "https://www.bram.us/"
+        }
+    ],
+    "require": {
+    	"php": ">=5.4"
+    },
+	"autoload": {
+		"psr-0": {
+			"Bramus": "src/"
+		}
+	}
+}

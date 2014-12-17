@@ -19,8 +19,7 @@ if (php_sapi_name() != 'cli') exit('Please run this file on the command line. E.
 if ($argc != 2 || !parse_url($argv[1])) exit('Please use a valid URL you wish to scan as a parameter to this script. Eg. `php bin/scanner.php https://www.bram.us/`' . PHP_EOL);
 
 // Require needed Scanner class
-require __DIR__ . '/../src/Bramus/MCS/Scanner.php';
-require __DIR__ . '/../src/Bramus/MCS/DOMDocument.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 // Get ignorepatterns
 $ignorePatterns = include __DIR__ . '/../conf/ignorePatterns.php';

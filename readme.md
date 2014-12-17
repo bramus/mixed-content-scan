@@ -12,6 +12,14 @@ The script starts at a given URL, and then starts processing it:
 *  All contained `img[src]`, `iframe[src]`, `script[src]`, and `link[href][rel="stylesheet"]`, and `object[data]` elements are checked for being Mixed Content or not
 *  All contained `a[href]` elements linking to the same or a deeper level are successively processed for Mixed Content.
 
+## Installation
+
+Git clone this repo and install the dependencies using Composer
+
+```
+git clone git@github.com:bramus/mixed-content-scan.git && composer install
+```
+
 ## Usage
 
 Run this script from the CLI, a such:
