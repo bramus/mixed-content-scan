@@ -15,11 +15,12 @@ ini_set('display_errors', 'on');
 // Check if we're at the CLI
 if (php_sapi_name() != 'cli') exit('Please run this file on the command line. E.g. `php bin/scanner.php $url`' . PHP_EOL);
 
+// Require autoloader
+if (!file_exists(__DIR__ . '/../vendor/autoload.php')) exit('Make sure you run `composer install` first, before running this scanner');
+require __DIR__ . '/../vendor/autoload.php';
+
 // Check arguments (simple)
 if ($argc != 2 || !parse_url($argv[1])) exit('Please use a valid URL you wish to scan as a parameter to this script. Eg. `php bin/scanner.php https://www.bram.us/`' . PHP_EOL);
-
-// Require needed Scanner class
-require __DIR__ . '/../vendor/autoload.php';
 
 // Get ignorepatterns
 $ignorePatterns = include __DIR__ . '/../conf/ignorePatterns.php';
