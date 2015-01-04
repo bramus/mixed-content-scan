@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "bramus/monolog-colored-line-formatter",
-            "version": "1.1",
+            "version": "1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bramus/monolog-colored-line-formatter.git",
-                "reference": "b97422718620ca4bdea2fd32312edad712fa6838"
+                "reference": "5700200d1d88389d05890ad3d623c26742562e08"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bramus/monolog-colored-line-formatter/zipball/b97422718620ca4bdea2fd32312edad712fa6838",
-                "reference": "b97422718620ca4bdea2fd32312edad712fa6838",
+                "url": "https://api.github.com/repos/bramus/monolog-colored-line-formatter/zipball/5700200d1d88389d05890ad3d623c26742562e08",
+                "reference": "5700200d1d88389d05890ad3d623c26742562e08",
                 "shasum": ""
             },
             "require": {
@@ -50,7 +50,7 @@
                 }
             ],
             "description": "Colored Line Formatter for Monolog",
-            "time": "2015-01-04 00:45:52"
+            "time": "2015-01-04 23:29:47"
         },
         {
             "name": "monolog/monolog",
