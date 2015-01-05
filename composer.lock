@@ -7,20 +7,61 @@
     "hash": "8226cdeaeb52a7fd5e87e5ac556a6507",
     "packages": [
         {
-            "name": "bramus/monolog-colored-line-formatter",
-            "version": "1.2",
+            "name": "bramus/ansi-php",
+            "version": "1.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/bramus/monolog-colored-line-formatter.git",
-                "reference": "5700200d1d88389d05890ad3d623c26742562e08"
+                "url": "https://github.com/bramus/ansi-php.git",
+                "reference": "f9a734b1f8c38c832d298b2b465d97ac020051e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bramus/monolog-colored-line-formatter/zipball/5700200d1d88389d05890ad3d623c26742562e08",
-                "reference": "5700200d1d88389d05890ad3d623c26742562e08",
+                "url": "https://api.github.com/repos/bramus/ansi-php/zipball/f9a734b1f8c38c832d298b2b465d97ac020051e3",
+                "reference": "f9a734b1f8c38c832d298b2b465d97ac020051e3",
                 "shasum": ""
             },
             "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Bramus\\Ansi\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bramus Van Damme",
+                    "email": "bramus@bram.us",
+                    "homepage": "https://www.bram.us/"
+                }
+            ],
+            "description": "ANSI Control Functions and ANSI Control Sequences (Colors, Erasing, etc.) for PHP CLI Apps",
+            "time": "2015-01-05 20:04:00"
+        },
+        {
+            "name": "bramus/monolog-colored-line-formatter",
+            "version": "1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bramus/monolog-colored-line-formatter.git",
+                "reference": "68655ba315a1ac8ea86d0066e27814c93ec325a3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bramus/monolog-colored-line-formatter/zipball/68655ba315a1ac8ea86d0066e27814c93ec325a3",
+                "reference": "68655ba315a1ac8ea86d0066e27814c93ec325a3",
+                "shasum": ""
+            },
+            "require": {
+                "bramus/ansi-php": "~1.0",
                 "php": ">=5.3.3"
             },
             "require-dev": {
@@ -50,7 +91,7 @@
                 }
             ],
             "description": "Colored Line Formatter for Monolog",
-            "time": "2015-01-04 23:29:47"
+            "time": "2015-01-05 20:29:11"
         },
         {
             "name": "monolog/monolog",
