@@ -4,24 +4,24 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8226cdeaeb52a7fd5e87e5ac556a6507",
+    "hash": "2e3babdface61af286fd379048d7db80",
     "packages": [
         {
             "name": "bramus/ansi-php",
-            "version": "1.0",
+            "version": "2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bramus/ansi-php.git",
-                "reference": "f9a734b1f8c38c832d298b2b465d97ac020051e3"
+                "reference": "0367b7ea3c9e5f21f6cf2637d9451c2d3c6de91f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bramus/ansi-php/zipball/f9a734b1f8c38c832d298b2b465d97ac020051e3",
-                "reference": "f9a734b1f8c38c832d298b2b465d97ac020051e3",
+                "url": "https://api.github.com/repos/bramus/ansi-php/zipball/0367b7ea3c9e5f21f6cf2637d9451c2d3c6de91f",
+                "reference": "0367b7ea3c9e5f21f6cf2637d9451c2d3c6de91f",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": ">=5.4.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "~4.0"
@@ -44,25 +44,25 @@
                 }
             ],
             "description": "ANSI Control Functions and ANSI Control Sequences (Colors, Erasing, etc.) for PHP CLI Apps",
-            "time": "2015-01-05 20:04:00"
+            "time": "2015-01-06 15:08:58"
         },
         {
             "name": "bramus/monolog-colored-line-formatter",
-            "version": "1.4",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bramus/monolog-colored-line-formatter.git",
-                "reference": "68655ba315a1ac8ea86d0066e27814c93ec325a3"
+                "reference": "33e8125337ebd37a086aaa48be1801e810f3242c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bramus/monolog-colored-line-formatter/zipball/68655ba315a1ac8ea86d0066e27814c93ec325a3",
-                "reference": "68655ba315a1ac8ea86d0066e27814c93ec325a3",
+                "url": "https://api.github.com/repos/bramus/monolog-colored-line-formatter/zipball/33e8125337ebd37a086aaa48be1801e810f3242c",
+                "reference": "33e8125337ebd37a086aaa48be1801e810f3242c",
                 "shasum": ""
             },
             "require": {
-                "bramus/ansi-php": "~1.0",
-                "php": ">=5.3.3"
+                "bramus/ansi-php": "~2.0",
+                "php": ">=5.4.0"
             },
             "require-dev": {
                 "monolog/monolog": "~1.0",
@@ -91,7 +91,7 @@
                 }
             ],
             "description": "Colored Line Formatter for Monolog",
-            "time": "2015-01-05 20:29:11"
+            "time": "2015-01-06 23:05:16"
         },
         {
             "name": "monolog/monolog",
