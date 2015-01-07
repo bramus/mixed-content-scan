@@ -18,5 +18,8 @@
 		"psr-4": {
 			"Bramus\\MCS\\": "src/"
 		}
-	}
+	},
+    "bin": [
+        "bin/scanner.php"
+    ]
 }
