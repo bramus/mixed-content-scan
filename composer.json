@@ -15,8 +15,8 @@
         "bramus/monolog-colored-line-formatter": "~2.0"
     },
 	"autoload": {
-		"psr-0": {
-			"Bramus": "src/"
+		"psr-4": {
+			"Bramus\\MCS\\": "src/"
 		}
 	}
 }
