@@ -20,6 +20,6 @@
 		}
 	},
     "bin": [
-        "bin/scanner.php"
+        "bin/mixed-content-scan"
     ]
 }
