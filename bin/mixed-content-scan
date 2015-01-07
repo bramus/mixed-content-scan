@@ -16,8 +16,8 @@ if (php_sapi_name() != 'cli') exit('Please run this file on the command line. E.
 // Require autoloader
 if (file_exists(__DIR__ . '/../vendor/autoload.php')) { // Installed Locally
     require __DIR__ . '/../vendor/autoload.php';
-} elseif (file_exists(__DIR__ . '/../../../vendor/autoload.php')) { // Installed Globally
-    require __DIR__ . '/../../../vendor/autoload.php';
+} elseif (file_exists(__DIR__ . '/../../../autoload.php')) { // Installed Globally
+    require __DIR__ . '/../../../autoload.php';
 } else {
     exit('Make sure you run `composer install` first, before running this scanner');
 }
