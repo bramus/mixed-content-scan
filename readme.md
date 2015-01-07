@@ -6,19 +6,19 @@ Built by Bramus! - [https://www.bram.us/](https://www.bram.us/)
 
 ## About
 
-`Mixed Content Scan` is a scanner which scans HTTPS-enabled websites for Mixed Content.
+`Mixed Content Scan` is a CLI Script which crawls+scans HTTPS-enabled websites for Mixed Content.
 
-The script starts at a given URL, and then starts processing+crawling it:
+The script starts at a given URL, and then starts processing it:
 
 *  All contained `img[src]`, `iframe[src]`, `script[src]`, and `link[href][rel="stylesheet"]`, and `object[data]` elements are checked for being Mixed Content or not
 *  All contained `a[href]` elements linking to the same or a deeper level are successively processed for Mixed Content.
 
 ## Installation
 
-Git clone this repo and install the dependencies using Composer
+Installation is possible using Composer
 
 ```
-git clone git@github.com:bramus/mixed-content-scan.git && composer install
+composer global require bramus/mixed-content-scan ~2.0
 ```
 
 _Don't know what this Composer thing is?_ If you don't know how to work with Composer you may download the 1.0 release from [the Releases page](https://github.com/bramus/mixed-content-scan/releases). It's a first (rough) version of MCS which also does the job.
@@ -28,13 +28,13 @@ _Don't know what this Composer thing is?_ If you don't know how to work with Com
 Run this script from the CLI, a such:
 
 ```
-$ php bin/scanner.php https://www.bram.us/
+$ mixed-content-scan https://www.bram.us/
 ```
 
 The script itself will start scanning and give feedback whilst running. When Mixed Content is found, the URLs causing Mixed Content warnings will be shown on screen:
 
 ```
-$ php bin/scanner.php https://www.bram.us/
+$ mixed-content-scan https://www.bram.us/
 [2015-01-07 12:54:20] MCS.NOTICE: Scanning https://www.bram.us/ [] []
 [2015-01-07 12:54:21] MCS.INFO: 00000 - https://www.bram.us/ [] []
 [2015-01-07 12:54:22] MCS.INFO: 00001 - https://www.bram.us/projects/ [] []

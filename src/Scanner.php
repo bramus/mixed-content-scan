@@ -3,9 +3,8 @@
 namespace Bramus\MCS;
 
 /**
- * A (quick and dirty) scanner to scanning all (linked) pages of an https-enabled website for Mixed Content
+ * MCS\Scanner - A scanner class to crawl+scan HTTPS-enabled websites for Mixed Content.
  * @author Bramus! <bramus@bram.us>
- * @version 1.0
  */
 class Scanner
 {
