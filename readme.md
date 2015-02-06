@@ -94,21 +94,21 @@ Internally Mixed Content Scan uses Curl to perform requests. If an error should 
 
 It's possible to define a list of patterns to ignore. To do so, edit the array defined in `conf/ignorePatterns.php`. The only prerequisite is that the array itself is returned, and that the patterns are PCRE patterns.
 
-The default ignore patterns defined are those for a Wordpress installation:
+The default ignore patterns defined are those for a WordPress installation:
 
 ```
 return [
-	'^{$rootUrl}/page/(\d+)/$', // Paginated Overview Links
-	// '^{$rootUrl}/(\d+)/(\d+)/', // Single Post Links
-	'^{$rootUrl}/tag/', // Tag Overview Links
-	'^{$rootUrl}/author/', // Author Overview Links
-	'^{$rootUrl}/category/', // Category Overview Links
-	'^{$rootUrl}/(\d+)/(\d+)/$', // Monthly Overview Links
-	'^{$rootUrl}/(\d+)/$',  // Year Overview Links
-	'^{$rootUrl}/comment-subscriptions', // Comment Subscription Link
-	'^{$rootUrl}/(.*)?wp\-(.*)\.php', // Wordpress Core File Links
-	'^{$rootUrl}/archive/', // Archive Links
-	'\?replytocom\=', // Replyto Links
+    '^{$rootUrl}/page/(\d+)/$', // Paginated Overview Links
+    // '^{$rootUrl}/(\d+)/(\d+)/', // Single Post Links
+    '^{$rootUrl}/tag/', // Tag Overview Links
+    '^{$rootUrl}/author/', // Author Overview Links
+    '^{$rootUrl}/category/', // Category Overview Links
+    '^{$rootUrl}/(\d+)/(\d+)/$', // Monthly Overview Links
+    '^{$rootUrl}/(\d+)/$',  // Year Overview Links
+    '^{$rootUrl}/comment-subscriptions', // Comment Subscription Link
+    '^{$rootUrl}/(.*)?wp\-(.*)\.php', // Wordpress Core File Links
+    '^{$rootUrl}/archive/', // Archive Links
+    '\?replytocom\=', // Replyto Links
 ];
 ```
 
