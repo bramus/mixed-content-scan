@@ -24,7 +24,8 @@ if (file_exists(__DIR__ . '/../vendor/autoload.php')) { // Installed Locally
 
 
 // Check arguments (simple)
-if ($argc != 2 || !parse_url($argv[1])) exit('Please use a valid URL you wish to scan as a parameter to this script. Eg. `php bin/scanner.php https://www.bram.us/`' . PHP_EOL);
+if (!($argc == 2 || $argc == 3) || !parse_url($argv[1])) exit('Please use a valid URL you wish to scan as a parameter to this script. Eg. `php bin/scanner.php https://www.bram.us/`' . PHP_EOL);
+if ($argc == 3 && !($argv[2] == "--json")) exit('The only acceptable extra argument is --json.' . PHP_EOL);
 
 // Get ignorepatterns
 $ignorePatterns = include __DIR__ . '/../conf/ignorePatterns.php';
@@ -32,7 +33,13 @@ $ignorePatterns = include __DIR__ . '/../conf/ignorePatterns.php';
 // Create logger
 $logger = new \Monolog\Logger('MCS');
 $handler = new \Monolog\Handler\StreamHandler('php://stdout', 200);
-$handler->setFormatter(new \Bramus\Monolog\Formatter\ColoredLineFormatter());
+
+if ($argc == 3 && ($argv[2] == "--json"))
+  $handler->setFormatter(new \Monolog\Formatter\JsonFormatter());
+else
+  $handler->setFormatter(new \Bramus\Monolog\Formatter\ColoredLineFormatter());
+
+
 $logger->pushHandler($handler);
 
 // Go for it!
