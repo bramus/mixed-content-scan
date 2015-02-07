@@ -97,8 +97,6 @@ Mixed Content Scan support several CLI options which can manipulate its behavior
 
 Example: `mixed-content-scan https://www.bram.us/ --ingore=./wordpress.txt --output=./results.txt --format=no-ansi`
 
-The logic to parsing the options is provided by [pwfisher/command-line-php](https://github.com/pwfisher/CommandLine.php).
-
 ## Handling errors
 
 Internally Mixed Content Scan uses Curl to perform requests. If an error should be encountered (in case of a connection loss for example), the error will be shown on screen:
