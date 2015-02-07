@@ -87,13 +87,14 @@ Mixed Content Scan uses ANSI coloring, provided by [bramus/ansi-php](https://git
 Mixed Content Scan support several CLI options which can manipulate its behavior:
 
 - `--output=path/to/file`: File to output results to. Defaults to `php://stdout` (= show on screen).
-- `--format=ansi|no-ansi|json`: Define which formatter to use for outputting the results _(Default: `ansi`)_
-    - `ansi`: ANSI Colored Line Formatter
+- `--format=ansi|no-ansi|json`: Define which formatter to use for outputting the results
+    - `ansi` _(Default)_: ANSI Colored Line Formatter
     - `no-ansi`: Monolog Line Formatter
     - `json`: Monolog JSON Formatter
 - `--no-crawl`: Don't crawl scanned pages for new pages
 - `--input=path/to/file`: Specify a file containing a list of links as the source, instead of parsing the passed in URL. Automatically enables `--no-crawl`
 - `--ignore=path/to/file`: File containing URL patterns to ignore. See _Ignoring links_ further down on how to build this file.
+- `--loglevel=level`: The Monolog loglevel to log at. Defaults to `200`. See [Monolog Log Levels](https://github.com/Seldaek/monolog#log-levels) for more info.
 
 Example: `mixed-content-scan https://www.bram.us/ --ingore=./wordpress.txt --output=./results.txt --format=no-ansi`
 

@@ -26,6 +26,7 @@ if (file_exists(__DIR__ . '/../vendor/autoload.php')) { // Installed Locally
 $cli = new \Garden\Cli\Cli();
 
 $cli->description('Scan your HTTPS-enabled website for Mixed Content.')
+    ->opt('loglevel', 'The Monolog loglevel to log at. Defaults to 200.', false, 'integer')
     ->opt('output', 'Stream to write to. Defaults to `php://stdout`', false)
     ->opt('format', 'Output format to use. Allowed values: `ansi`, `no-ansi`, or `json`. Defaults to `ansi`', false)
     ->opt('no-crawl', 'Don\'t crawl scanned pages for new pages.', false)
@@ -38,8 +39,9 @@ $opts = $cli->parse($argv, true)->getOpts();
 $args = $cli->parse($argv, true)->getArgs();
 
 // Create logger writing to the specified output
+$loglevel = isset($opts['loglevel']) ? (int) $opts['loglevel'] : 200;
 $logger = new \Monolog\Logger('MCS');
-$handler = new \Monolog\Handler\StreamHandler((isset($opts['output']) ? $opts['output'] : 'php://stdout'), 200);
+$handler = new \Monolog\Handler\StreamHandler((isset($opts['output']) ? $opts['output'] : 'php://stdout'), $loglevel);
 
 // Define formatter to use
 if (!isset($opts['format'])) $opts['format'] = 'ansi';
