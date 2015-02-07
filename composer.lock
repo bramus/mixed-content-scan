@@ -4,20 +4,20 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c734489b7d5c2e841ecaf074b150f8c2",
+    "hash": "58dbc3ee493b9d73584f0e5737a29381",
     "packages": [
         {
             "name": "bramus/ansi-php",
-            "version": "3.0",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bramus/ansi-php.git",
-                "reference": "fba7715a85c9db8246bd8cf02b607cdf518face7"
+                "reference": "c0dcf9a949e1c6111bbbb52a8ead34776064b209"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bramus/ansi-php/zipball/fba7715a85c9db8246bd8cf02b607cdf518face7",
-                "reference": "fba7715a85c9db8246bd8cf02b607cdf518face7",
+                "url": "https://api.github.com/repos/bramus/ansi-php/zipball/c0dcf9a949e1c6111bbbb52a8ead34776064b209",
+                "reference": "c0dcf9a949e1c6111bbbb52a8ead34776064b209",
                 "shasum": ""
             },
             "require": {
@@ -44,7 +44,7 @@
                 }
             ],
             "description": "ANSI Control Functions and ANSI Control Sequences (Colors, Erasing, etc.) for PHP CLI Apps",
-            "time": "2015-01-07 21:02:00"
+            "time": "2015-01-08 15:02:37"
         },
         {
             "name": "bramus/monolog-colored-line-formatter",
