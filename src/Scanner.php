@@ -27,6 +27,18 @@ class Scanner
     private $rootUrl;
 
     /**
+     * The Base path of the root URL
+     * @var String
+     */
+    private $rootUrlBasePath;
+
+    /**
+     * The URL parts of the root URL, as parsed by parse_url()
+     * @var Array
+     */
+    private $rootUrlParts;
+
+    /**
      * Array of all pages scanned / about to be scanned
      * @var Array
      */
