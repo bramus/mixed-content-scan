@@ -27,6 +27,18 @@ class Scanner
     private $rootUrl;
 
     /**
+     * The Base path of the root URL
+     * @var String
+     */
+    private $rootUrlBasePath;
+
+    /**
+     * The URL parts of the root URL, as parsed by parse_url()
+     * @var Array
+     */
+    private $rootUrlParts;
+
+    /**
      * Array of all pages scanned / about to be scanned
      * @var Array
      */
@@ -61,6 +73,13 @@ class Scanner
      */
     private function setRootUrl($rootUrl, $limitToPath = true)
     {
+
+        // If the rootUrl is *, it means that we'll pass in some URLs manually
+        if ($rootUrl == '*') {
+            $this->rootUrl = $rootUrl;
+            return;
+        }
+
         // Make sure the rootUrl is parse-able
         $urlParts = parse_url($rootUrl);
         if (!$urlParts) {
@@ -90,7 +109,7 @@ class Scanner
         $this->rootUrlParts = $urlParts;
     }
 
-    private function setIgnorePatterns($ignorePatterns, $toReplace = '{$rootUrl}')
+    public function setIgnorePatterns($ignorePatterns, $toReplace = '{$rootUrl}')
     {
         // Force trailing / on $toReplace
         if (substr($toReplace, -1) != '/') {
@@ -115,7 +134,9 @@ class Scanner
     public function scan()
     {
         // Add the root URL to the list of pages
-        $this->pages[] = $this->rootUrl;
+        if ($this->rootUrl != '*') {
+            $this->pages[] = $this->rootUrl;
+        }
 
         // Give feedback on the CLI
         $this->logger->addNotice('Scanning '.$this->rootUrl);

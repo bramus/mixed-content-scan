@@ -1,0 +1,32 @@
+# Paginated Overview Links
+^{$rootUrl}/page/(\d+)/$
+
+# Single Post Links
+# ^{$rootUrl}/(\d+)/(\d+)/
+
+# Tag Overview Links
+^{$rootUrl}/tag/
+
+# Author Overview Links
+^{$rootUrl}/author/
+
+# Category Overview Links
+^{$rootUrl}/category/
+
+# Monthly Overview Links
+^{$rootUrl}/(\d+)/(\d+)/$
+
+# Year Overview Links
+^{$rootUrl}/(\d+)/$
+
+# Comment Subscription Link
+^{$rootUrl}/comment-subscriptions
+
+# Wordpress Core File Links
+^{$rootUrl}/(.*)?wp\-(.*)\.php
+
+# Archive Links
+^{$rootUrl}/archive/
+
+# Replyto Links
+\?replytocom\=
