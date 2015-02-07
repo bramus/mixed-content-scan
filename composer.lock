@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "58dbc3ee493b9d73584f0e5737a29381",
+    "hash": "a75fc9ecd65c3006ce252383a9769a49",
     "packages": [
         {
             "name": "bramus/ansi-php",
@@ -197,12 +197,55 @@
                 "psr-3"
             ],
             "time": "2012-12-21 11:40:51"
+        },
+        {
+            "name": "pwfisher/command-line-php",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pwfisher/CommandLine.php.git",
+                "reference": "ce756a94efa3544b56d03a02d3634a8d969ee962"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pwfisher/CommandLine.php/zipball/ce756a94efa3544b56d03a02d3634a8d969ee962",
+                "reference": "ce756a94efa3544b56d03a02d3634a8d969ee962",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "CommandLine.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "CC-BY-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Patrick Fisher",
+                    "email": "patrick@pwfisher.com"
+                }
+            ],
+            "description": "PHP Command Line interface class. Provides friendly and flexible CLI argument parsing.",
+            "keywords": [
+                "cli",
+                "parser",
+                "parsing"
+            ],
+            "time": "2014-09-23 01:07:11"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "pwfisher/command-line-php": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
