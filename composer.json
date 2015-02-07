@@ -13,7 +13,7 @@
         "php": ">=5.4",
         "monolog/monolog": "~1.0",
         "bramus/monolog-colored-line-formatter": "~2.0",
-        "pwfisher/command-line-php": "dev-master"
+        "vanilla/garden-cli": "~1.0"
     },
     "autoload": {
         "psr-4": {

@@ -22,17 +22,28 @@ if (file_exists(__DIR__ . '/../vendor/autoload.php')) { // Installed Locally
     exit('Make sure you run `composer install` first, before running this scanner');
 }
 
-// Extract CLI Options/Arguments
-$args = CommandLine::parseArgs($argv);
+// Define CLI Options/Arguments
+$cli = new \Garden\Cli\Cli();
+
+$cli->description('Scan your HTTPS-enabled website for Mixed Content.')
+    ->opt('output', 'Stream to write to. Defaults to `php://stdout`', false)
+    ->opt('format', 'Output format to use. Allowed values: `ansi`, `no-ansi`, or `json`. Defaults to `ansi`', false)
+    ->opt('no-crawl', 'Don\'t crawl scanned pages for new pages.', false)
+    ->opt('input', 'Specify a file containing a list of links as the source, instead of parsing the passed in URL. Automatically enables `--no-crawl`', false)
+    ->opt('ignore', 'File containing URL patterns to ignore. See readme shipping with release on how to build this file.', false);
+
+// Parse and return cli options
+$opts = $cli->parse($argv, true)->getOpts();
+$args = $cli->parse($argv, true)->getArgs();
 
 // Create logger writing to the specified output
 $logger = new \Monolog\Logger('MCS');
-$handler = new \Monolog\Handler\StreamHandler((isset($args['output']) ? $args['output'] : 'php://stdout'), 200);
+$handler = new \Monolog\Handler\StreamHandler((isset($opts['output']) ? $opts['output'] : 'php://stdout'), 200);
 
 // Define formatter to use
-if (!isset($args['format'])) $args['format'] = 'ansi';
+if (!isset($opts['format'])) $opts['format'] = 'ansi';
 
-switch($args['format']) {
+switch($opts['format']) {
 
     case 'no-ansi':
         $formatter = new \Monolog\Formatter\LineFormatter();
@@ -55,14 +66,14 @@ $logger->pushHandler($handler);
 
 // Define the rootURL and/or the list of links to scan
 $urlsToQueue = [];
-if (isset($args['input'])) {
+if (isset($opts['input'])) {
 
     // Set the rootUrl to the wildcard
     $rootUrl = '*';
 
     // Open the file and make sure it's readable
     try {
-        $fi = new \SplFileObject($args['input']);
+        $fi = new \SplFileObject($opts['input']);
     } catch(\Exception $e) {
         $logger->addError('Please make sure the file containing the list of links passed in via `--input` exists and is readable.');
         exit();
@@ -78,7 +89,7 @@ if (isset($args['input'])) {
     }
 
     // Make sure `--no-crawl` is set when working with `--input-file`
-    $args['no-crawl'] = true;
+    $opts['no-crawl'] = true;
 
     // Give a notice if we have ignored any passed in rootUrl
     if (isset($args[0])) $logger->addNotice('Using an input-file as source. Ignoring the passed in $rootUrl');
@@ -96,11 +107,11 @@ if (isset($args['input'])) {
 
 // Define the ignore patterns
 $ignorePatterns = [];
-if (isset($args['ignore'])) {
+if (isset($opts['ignore'])) {
 
     // Open the file and make sure it's readable
     try {
-        $fi = new \SplFileObject($args['ignore']);
+        $fi = new \SplFileObject($opts['ignore']);
     } catch(\Exception $e) {
         $logger->addError('Please make sure the file containing the ignore patterns passed in via `--ignore` exists and is readable.');
         exit();
@@ -117,7 +128,7 @@ if (isset($args['ignore'])) {
 }
 
 // Do we need to crawl or not?
-if (isset($args['no-crawl'])) {
+if (isset($opts['no-crawl'])) {
     $crawl = false;
 } else {
     $crawl = true;
