@@ -11,7 +11,7 @@ error_reporting(E_ERROR);
 ini_set('display_errors', 'on');
 
 // Check if we're at the CLI
-if (php_sapi_name() != 'cli') exit('Please run this file on the command line. E.g. `php bin/scanner.php $url`' . PHP_EOL);
+if (php_sapi_name() != 'cli') exit('Please run this file on the command line. E.g. `mixed-content-scan $url`' . PHP_EOL);
 
 // Require autoloader
 if (file_exists(__DIR__ . '/../vendor/autoload.php')) { // Installed Locally
@@ -22,27 +22,111 @@ if (file_exists(__DIR__ . '/../vendor/autoload.php')) { // Installed Locally
     exit('Make sure you run `composer install` first, before running this scanner');
 }
 
+// Extract CLI Options/Arguments
+$args = CommandLine::parseArgs($argv);
 
-// Check arguments (simple)
-if (!($argc == 2 || $argc == 3) || !parse_url($argv[1])) exit('Please use a valid URL you wish to scan as a parameter to this script. E.g. `php bin/scanner.php https://www.bram.us/`' . PHP_EOL);
-if ($argc == 3 && !($argv[2] == '--json')) exit('The only acceptable extra argument is --json.' . PHP_EOL);
-
-// Get ignorepatterns
-$ignorePatterns = include __DIR__ . '/../conf/ignorePatterns.php';
-
-// Create logger
+// Create logger writing to the specified output
 $logger = new \Monolog\Logger('MCS');
-$handler = new \Monolog\Handler\StreamHandler('php://stdout', 200);
+$handler = new \Monolog\Handler\StreamHandler((isset($args['output']) ? $args['output'] : 'php://stdout'), 200);
 
-if ($argc == 3 && ($argv[2] == '--json')) {
-    $handler->setFormatter(new \Monolog\Formatter\JsonFormatter());
-} else {
-    $handler->setFormatter(new \Bramus\Monolog\Formatter\ColoredLineFormatter());
+// Define formatter to use
+if (!isset($args['format'])) $args['format'] = 'ansi';
+
+switch($args['format']) {
+
+    case 'no-ansi':
+        $formatter = new \Monolog\Formatter\LineFormatter();
+        break;
+
+    case 'json':
+        $formatter = new \Monolog\Formatter\JSONFormatter();
+        break;
+
+    case 'ansi':
+    default:
+        $formatter = new \Bramus\Monolog\Formatter\ColoredLineFormatter();
+        break;
+
 }
 
-
+// Link formatter to logger
+$handler->setFormatter($formatter);
 $logger->pushHandler($handler);
 
+// Define the rootURL and/or the list of links to scan
+$urlsToQueue = [];
+if (isset($args['input'])) {
+
+    // Set the rootUrl to the wildcard
+    $rootUrl = '*';
+
+    // Open the file and make sure it's readable
+    try {
+        $fi = new \SplFileObject($args['input']);
+    } catch(\Exception $e) {
+        $logger->addError('Please make sure the file containing the list of links passed in via `--input` exists and is readable.');
+        exit();
+    }
+    if (!$fi->isFile() || !$fi->isReadable()) {
+        $logger->addError('Please make sure the file containing the list of links passed in via `--input` exists and is readable.');
+        exit();
+    }
+
+    // Loop the contents and queue all URLs
+    foreach ($fi as $link) {
+        if (parse_url(trim($link))) $urlsToQueue[] = trim($link);
+    }
+
+    // Make sure `--no-crawl` is set when working with `--input-file`
+    $args['no-crawl'] = true;
+
+    // Give a notice if we have ignored any passed in rootUrl
+    if (isset($args[0])) $logger->addNotice('Using an input-file as source. Ignoring the passed in $rootUrl');
+
+} else {
+
+    if (!isset($args[0]) || !parse_url($args[0])) {
+        $logger->addError('Please pass (at least) 1 argument to this script, namely the URL to scan. E.g. `mixed-content-scan $url`');
+        exit();
+    }
+
+    $rootUrl = $args[0];
+
+}
+
+// Define the ignore patterns
+$ignorePatterns = [];
+if (isset($args['ignore'])) {
+
+    // Open the file and make sure it's readable
+    try {
+        $fi = new \SplFileObject($args['ignore']);
+    } catch(\Exception $e) {
+        $logger->addError('Please make sure the file containing the ignore patterns passed in via `--ignore` exists and is readable.');
+        exit();
+    }
+    if (!$fi->isFile() || !$fi->isReadable()) {
+        $logger->addError('Please make sure the file containing the ignore patterns passed in via `--ignore` exists and is readable.');
+        exit();
+    }
+
+    // Loop the contents and extract all patterns
+    foreach ($fi as $pattern) {
+        if ((strlen(trim($pattern)) > 0) && (substr($pattern, 0, 1) != '#')) $ignorePatterns[] = trim($pattern);
+    }
+}
+
+// Do we need to crawl or not?
+if (isset($args['no-crawl'])) {
+    $crawl = false;
+} else {
+    $crawl = true;
+}
+
 // Go for it!
-$scanner = new \Bramus\MCS\Scanner($argv[1], $logger, (array) $ignorePatterns);
+$scanner = new \Bramus\MCS\Scanner($rootUrl, $logger, (array) $ignorePatterns);
+$scanner->setCrawl($crawl);
+if (sizeof($urlsToQueue) > 0) $scanner->queueUrls($urlsToQueue);
 $scanner->scan();
+
+// EOF

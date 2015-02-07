@@ -77,7 +77,24 @@ $ mixed-content-scan https://www.bram.us/
 ...
 ```
 
-Mixed Content Scan uses ANSI coloring so one can easily spot errors based on the color.
+Mixed Content Scan uses ANSI coloring, provided by [bramus/ansi-php](https://github.com/bramus/ansi-php), so one can easily spot errors based on the color.
+
+## Advanced usage / CLI Options
+
+Mixed Content Scan support several CLI options which can manipulate its behavior:
+
+- `--output=path/to/file`: File to output results to. Defaults to `php://stdout` (= show on screen).
+- `--format=ansi|no-ansi|json`: Define which formatter to use for outputting the results _(Default: `ansi`)_
+    - `ansi`: ANSI Colored Line Formatter
+    - `no-ansi`: Monolog Line Formatter
+    - `json`: Monolog JSON Formatter
+- `--no-crawl`: Don't crawl scanned pages for new pages
+- `--input=path/to/file`: Specify a file containing a list of links as the source, instead of parsing the passed in URL. Automatically enables `--no-crawl`
+- `--ignore=path/to/file`: File containing URL patterns to ignore. See _Ignoring links_ further down on how to build this file.
+
+Example: `mixed-content-scan https://www.bram.us/ --ingore=./wordpress.txt --output=./results.txt --format=no-ansi`
+
+The logic to parsing the options is provided by [pwfisher/command-line-php](https://github.com/pwfisher/CommandLine.php).
 
 ## Handling errors
 
@@ -92,24 +109,43 @@ Internally Mixed Content Scan uses Curl to perform requests. If an error should 
 
 ## Ignoring links
 
-It's possible to define a list of patterns to ignore. To do so, edit the array defined in `conf/ignorePatterns.php`. The only prerequisite is that the array itself is returned, and that the patterns are PCRE patterns.
+It's possible to define a list of patterns to ignore. To do so, create a text file with on each line a PCRE pattern to ignore. Pass in the path to that file using the `--ignore` option. Lines starting with `#` are considered being comments and therefore are ignored.
 
-The default ignore patterns defined are those for a WordPress installation:
+For a WordPress installation, the ignore pattern file – which is distributed with Mixed Content Scan in `ignorepattens/wordpress.php` – would be this:
 
 ```
-return [
-    '^{$rootUrl}/page/(\d+)/$', // Paginated Overview Links
-    // '^{$rootUrl}/(\d+)/(\d+)/', // Single Post Links
-    '^{$rootUrl}/tag/', // Tag Overview Links
-    '^{$rootUrl}/author/', // Author Overview Links
-    '^{$rootUrl}/category/', // Category Overview Links
-    '^{$rootUrl}/(\d+)/(\d+)/$', // Monthly Overview Links
-    '^{$rootUrl}/(\d+)/$',  // Year Overview Links
-    '^{$rootUrl}/comment-subscriptions', // Comment Subscription Link
-    '^{$rootUrl}/(.*)?wp\-(.*)\.php', // Wordpress Core File Links
-    '^{$rootUrl}/archive/', // Archive Links
-    '\?replytocom\=', // Replyto Links
-];
+# Paginated Overview Links
+^{$rootUrl}/page/(\d+)/$
+
+# Single Post Links
+# ^{$rootUrl}/(\d+)/(\d+)/
+
+# Tag Overview Links
+^{$rootUrl}/tag/
+
+# Author Overview Links
+^{$rootUrl}/author/
+
+# Category Overview Links
+^{$rootUrl}/category/
+
+# Monthly Overview Links
+^{$rootUrl}/(\d+)/(\d+)/$
+
+# Year Overview Links
+^{$rootUrl}/(\d+)/$
+
+# Comment Subscription Link
+^{$rootUrl}/comment-subscriptions
+
+# Wordpress Core File Links
+^{$rootUrl}/(.*)?wp\-(.*)\.php
+
+# Archive Links
+^{$rootUrl}/archive/
+
+# Replyto Links
+\?replytocom\=
 ```
 
 The `{$rootUrl}` token in each pattern will be replaced with the (root) URL passed into the script.
