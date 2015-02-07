@@ -30,7 +30,8 @@ $cli->description('Scan your HTTPS-enabled website for Mixed Content.')
     ->opt('format', 'Output format to use. Allowed values: `ansi`, `no-ansi`, or `json`. Defaults to `ansi`', false)
     ->opt('no-crawl', 'Don\'t crawl scanned pages for new pages.', false)
     ->opt('input', 'Specify a file containing a list of links as the source, instead of parsing the passed in URL. Automatically enables `--no-crawl`', false)
-    ->opt('ignore', 'File containing URL patterns to ignore. See readme shipping with release on how to build this file.', false);
+    ->opt('ignore', 'File containing URL patterns to ignore. See readme shipping with release on how to build this file.', false)
+    ->arg('rootUrl', 'The URL to start scanning at', false);
 
 // Parse and return cli options
 $opts = $cli->parse($argv, true)->getOpts();
