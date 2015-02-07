@@ -56,11 +56,18 @@ class Scanner
      */
     public function __construct($rootUrl, $logger, $ignorePatterns)
     {
-        // Store the rootUrl
-        $this->setRootUrl($rootUrl);
 
         // Store logger
         $this->logger = $logger;
+
+        // Make sure Curl is installed and enabled
+        if (!function_exists('curl_init')) {
+            $this->logger->addEmergency('The required PHP curl extension is not installed or enabled');
+            throw new \Exception('The required PHP curl extension is not installed or enabled');
+        }
+
+        // Store the rootUrl
+        $this->setRootUrl($rootUrl);
 
         // store the ignorePatterns
         $this->setIgnorePatterns($ignorePatterns, '{$rootUrl}');
