@@ -73,6 +73,13 @@ class Scanner
      */
     private function setRootUrl($rootUrl, $limitToPath = true)
     {
+
+        // If the rootUrl is *, it means that we'll pass in some URLs manually
+        if ($rootUrl == '*') {
+            $this->rootUrl = $rootUrl;
+            return;
+        }
+
         // Make sure the rootUrl is parse-able
         $urlParts = parse_url($rootUrl);
         if (!$urlParts) {
@@ -127,7 +134,9 @@ class Scanner
     public function scan()
     {
         // Add the root URL to the list of pages
-        $this->pages[] = $this->rootUrl;
+        if ($this->rootUrl != '*') {
+            $this->pages[] = $this->rootUrl;
+        }
 
         // Give feedback on the CLI
         $this->logger->addNotice('Scanning '.$this->rootUrl);
