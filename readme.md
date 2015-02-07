@@ -1,5 +1,8 @@
 # Mixed Content Scan
 
+![Source](http://img.shields.io/badge/source-bramus/mixed--content--scan-blue.svg?style=flat-square) ![Version](https://img.shields.io/packagist/v/bramus/mixed-content-scan.svg?style=flat-square) ![Downloads](https://img.shields.io/packagist/dt/bramus/mixed-content-scan.svg?style=flat-square) ![License](https://img.shields.io/packagist/l/bramus/mixed-content-scan.svg?style=flat-square)
+
+
 Scan your HTTPS-enabled website for Mixed Content
 
 Built by Bramus! - [https://www.bram.us/](https://www.bram.us/)
