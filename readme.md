@@ -21,7 +21,7 @@ The script starts at a given URL, and then starts processing it:
 Installation is possible using Composer
 
 ```
-composer global require bramus/mixed-content-scan ~2.0
+composer global require bramus/mixed-content-scan ~2.1
 ```
 
 _Don't know what this Composer thing is?_ If you don't know how to work with Composer you may download the 1.0 release from [the Releases page](https://github.com/bramus/mixed-content-scan/releases). It's a first (rough) version of MCS which also does the job.
