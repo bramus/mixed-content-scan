@@ -113,7 +113,7 @@ Internally Mixed Content Scan uses Curl to perform requests. If an error should 
 
 It's possible to define a list of patterns to ignore. To do so, create a text file with on each line a PCRE pattern to ignore. Pass in the path to that file using the `--ignore` option. Lines starting with `#` are considered being comments and therefore are ignored.
 
-For a WordPress installation, the ignore pattern file – which is distributed with Mixed Content Scan in `ignorepattens/wordpress.php` – would be this:
+For a WordPress installation, the ignore pattern file – which is distributed with Mixed Content Scan in `ignorepattens/wordpress.txt` – would be this:
 
 ```
 # Paginated Overview Links
