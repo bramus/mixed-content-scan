@@ -90,7 +90,7 @@ class Scanner
         $this->rootUrlParts = $urlParts;
     }
 
-    private function setIgnorePatterns($ignorePatterns, $toReplace = '{$rootUrl}')
+    public function setIgnorePatterns($ignorePatterns, $toReplace = '{$rootUrl}')
     {
         // Force trailing / on $toReplace
         if (substr($toReplace, -1) != '/') {
