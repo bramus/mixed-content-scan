@@ -123,5 +123,6 @@ Mixed Content Scan:
 * Doesn't take `<base href="...">` into account _(but who uses that, anyways?)_
 * Doesn't scan linked `.css` or `.js` files themselves for Mixed Content
 * Doesn't scan inline `<script>` or `<style>` for mixed content
+* Doesn't scan `<form>` tags that point at `http://` endpoints
 
 Please open an issue _(or fix it and perform a pull request ;))_ when you've encountered a problem.
