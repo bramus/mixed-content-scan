@@ -82,9 +82,9 @@ class Scanner
 
         // Make sure the rootUrl is parse-able
         $urlParts = parse_url($rootUrl);
-        if (!$urlParts) {
+        if (!$urlParts || !isset($urlParts['scheme']) || !isset($urlParts['host'])) {
             $this->logger->addEmergency('Invalid rootUrl!');
-            exit();
+            throw new \Exception('Invalid rootUrl!');
         }
 
         // Force trailing / on rootUrl, it's easier for us to work with it

@@ -136,9 +136,13 @@ if (isset($opts['no-crawl'])) {
 }
 
 // Go for it!
-$scanner = new \Bramus\MCS\Scanner($rootUrl, $logger, (array) $ignorePatterns);
-$scanner->setCrawl($crawl);
-if (sizeof($urlsToQueue) > 0) $scanner->queueUrls($urlsToQueue);
-$scanner->scan();
+try {
+    $scanner = new \Bramus\MCS\Scanner($rootUrl, $logger, (array) $ignorePatterns);
+    $scanner->setCrawl($crawl);
+    if (sizeof($urlsToQueue) > 0) $scanner->queueUrls($urlsToQueue);
+    $scanner->scan();
+} catch(\Exception $e) {
+    exit();
+}
 
 // EOF
