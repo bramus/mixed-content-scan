@@ -53,7 +53,7 @@ switch($opts['format']) {
         break;
 
     case 'json':
-        $formatter = new \Monolog\Formatter\JSONFormatter();
+        $formatter = new \Monolog\Formatter\JsonFormatter();
         break;
 
     case 'ansi':
