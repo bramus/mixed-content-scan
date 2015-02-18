@@ -144,7 +144,7 @@ try {
     if (sizeof($urlsToQueue) > 0) $scanner->queueUrls($urlsToQueue);
     $scanner->scan();
 } catch(\Exception $e) {
-    exit();
+    exit(1);
 }
 
 // EOF
