@@ -30,6 +30,7 @@ $cli->description('Scan your HTTPS-enabled website for Mixed Content.')
     ->opt('output', 'Stream to write to. Defaults to `php://stdout`', false)
     ->opt('format', 'Output format to use. Allowed values: `ansi`, `no-ansi`, or `json`. Defaults to `ansi`', false)
     ->opt('no-crawl', 'Don\'t crawl scanned pages for new pages.', false)
+    ->opt('no-check-certificate', 'Don\'t check the certificate for validity.', false)
     ->opt('input', 'Specify a file containing a list of links as the source, instead of parsing the passed in URL. Automatically enables `--no-crawl`', false)
     ->opt('ignore', 'File containing URL patterns to ignore. See readme shipping with release on how to build this file.', false)
     ->arg('rootUrl', 'The URL to start scanning at', false);
@@ -137,10 +138,18 @@ if (isset($opts['no-crawl'])) {
     $crawl = true;
 }
 
+// Do we need to crawl or not?
+if (isset($opts['no-check-certificate'])) {
+    $checkCertificate = false;
+} else {
+    $checkCertificate = true;
+}
+
 // Go for it!
 try {
     $scanner = new \Bramus\MCS\Scanner($rootUrl, $logger, (array) $ignorePatterns);
     $scanner->setCrawl($crawl);
+    $scanner->setCheckCertificate($checkCertificate);
     if (sizeof($urlsToQueue) > 0) $scanner->queueUrls($urlsToQueue);
     $scanner->scan();
 } catch(\Exception $e) {

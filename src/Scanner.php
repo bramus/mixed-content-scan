@@ -15,6 +15,12 @@ class Scanner
     private $crawl = true;
 
     /**
+     * Do we check the certificates for being valid or not (true = allow self signed)
+     * @var boolean
+     */
+    private $checkCertificate = true;
+
+    /**
      * Logger
      * @var Object
      */
@@ -351,6 +357,7 @@ class Scanner
             CURLOPT_FOLLOWLOCATION => 1,
             CURLOPT_URL => $pageUrl,
             CURLOPT_TIMEOUT_MS => 10000,
+            CURLOPT_SSL_VERIFYPEER => $this->checkCertificate
         ));
 
         // Fetch the page contents
@@ -404,5 +411,23 @@ class Scanner
     public function setCrawl($crawl)
     {
         $this->crawl = (bool) $crawl;
+    }
+
+    /**
+     * Get checkCertificate value
+     * @return boolean
+     */
+    public function getCheckCertifate()
+    {
+        return $this->checkCertificate;
+    }
+
+    /**
+     * Set checkCertificate value
+     * @param boolean
+     */
+    public function setCheckCertificate($checkCertificate)
+    {
+        $this->checkCertificate = (bool) $checkCertificate;
     }
 }
