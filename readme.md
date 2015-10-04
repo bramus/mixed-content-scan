@@ -92,6 +92,7 @@ Mixed Content Scan support several CLI options which can manipulate its behavior
     - `no-ansi`: Monolog Line Formatter
     - `json`: Monolog JSON Formatter
 - `--no-crawl`: Don't crawl scanned pages for new pages
+- `--no-check-certificate`: Don\'t check the certificate for validity (e.g. allow self-signed ones)
 - `--input=path/to/file`: Specify a file containing a list of links as the source, instead of parsing the passed in URL. Automatically enables `--no-crawl`
 - `--ignore=path/to/file`: File containing URL patterns to ignore. See _Ignoring links_ further down on how to build this file.
 - `--loglevel=level`: The Monolog loglevel to log at. Defaults to `200`. See [Monolog Log Levels](https://github.com/Seldaek/monolog#log-levels) for more info.
