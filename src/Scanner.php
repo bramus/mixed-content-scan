@@ -355,13 +355,14 @@ class Scanner
         @curl_setopt_array($curl, array(
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_FOLLOWLOCATION => 1,
+            CURLOPT_HEADER => 1, // Return both response head and response body, not only the response body
             CURLOPT_URL => $pageUrl,
             CURLOPT_TIMEOUT_MS => 10000,
             CURLOPT_SSL_VERIFYPEER => $this->checkCertificate
         ));
 
-        // Fetch the page contents
-        $resp = curl_exec($curl);
+        // Fetch the response (both head and body)
+        $response = curl_exec($curl);
 
         // Fetch the URL of the page we actually fetched
         $newUrl = curl_getinfo($curl, CURLINFO_EFFECTIVE_URL);
@@ -388,11 +389,15 @@ class Scanner
             $this->logger->addCritical('cURL Error ('.$curl_errno.'): '.$curl_error);
         }
 
+        // Extract the response head and response body from the response
+        $headers = substr($response, 0, curl_getinfo($curl, CURLINFO_HEADER_SIZE));
+        $body = substr($response, -curl_getinfo($curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD));
+
         // Close it
         @curl_close($curl);
 
         // Return the fetched contents
-        return $resp;
+        return $body;
     }
 
     /**
