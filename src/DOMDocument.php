@@ -78,6 +78,16 @@ class DOMDocument extends \DOMDocument
             }
         }
 
+        // Check all `form` elements contained in the HTML
+        foreach ($this->getElementsByTagName('form') as $el) {
+            if ($el->hasAttribute('action')) {
+                $url = $el->getAttribute('action');
+                if (substr($url, 0, 7) == "http://") {
+                    $mixedContentUrls[] = $url;
+                }
+            }
+        }
+
         // Return found URLs
         return $mixedContentUrls;
     }
