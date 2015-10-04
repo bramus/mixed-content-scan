@@ -1,10 +1,11 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "hash": "469fbd5c71769722ffd3c8157e3e4d60",
+    "content-hash": "dcd053f64267964420754ef1ce94dd79",
     "packages": [
         {
             "name": "bramus/ansi-php",
@@ -90,16 +91,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "1.12.0",
+            "version": "1.17.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "1fbe8c2641f2b163addf49cc5e18f144bec6b19f"
+                "reference": "0524c87587ab85bc4c2d6f5b41253ccb930a5422"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/1fbe8c2641f2b163addf49cc5e18f144bec6b19f",
-                "reference": "1fbe8c2641f2b163addf49cc5e18f144bec6b19f",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/0524c87587ab85bc4c2d6f5b41253ccb930a5422",
+                "reference": "0524c87587ab85bc4c2d6f5b41253ccb930a5422",
                 "shasum": ""
             },
             "require": {
@@ -110,12 +111,15 @@
                 "psr/log-implementation": "1.0.0"
             },
             "require-dev": {
-                "aws/aws-sdk-php": "~2.4, >2.4.8",
+                "aws/aws-sdk-php": "^2.4.9",
                 "doctrine/couchdb": "~1.0@dev",
                 "graylog2/gelf-php": "~1.0",
-                "phpunit/phpunit": "~4.0",
-                "raven/raven": "~0.5",
-                "ruflin/elastica": "0.90.*",
+                "php-console/php-console": "^3.1.3",
+                "phpunit/phpunit": "~4.5",
+                "phpunit/phpunit-mock-objects": "2.3.0",
+                "raven/raven": "~0.11",
+                "ruflin/elastica": ">=0.90 <3.0",
+                "swiftmailer/swiftmailer": "~5.3",
                 "videlalvaro/php-amqplib": "~2.4"
             },
             "suggest": {
@@ -124,6 +128,7 @@
                 "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
                 "ext-mongo": "Allow sending log messages to a MongoDB server",
                 "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
+                "php-console/php-console": "Allow sending log messages to Google Chrome",
                 "raven/raven": "Allow sending log messages to a Sentry server",
                 "rollbar/rollbar": "Allow sending log messages to Rollbar",
                 "ruflin/elastica": "Allow sending log messages to an Elastic Search server",
@@ -132,7 +137,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.12.x-dev"
+                    "dev-master": "1.16.x-dev"
                 }
             },
             "autoload": {
@@ -158,7 +163,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2014-12-29 21:29:35"
+            "time": "2015-08-31 09:17:37"
         },
         {
             "name": "psr/log",
@@ -200,16 +205,16 @@
         },
         {
             "name": "vanilla/garden-cli",
-            "version": "v1.1.0",
+            "version": "v1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vanilla/garden-cli.git",
-                "reference": "c979b6bf804932c62c7249b6142e39c02595a47f"
+                "reference": "baa4a0813a45bd1bbc83e9f2f5bc866182384197"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vanilla/garden-cli/zipball/c979b6bf804932c62c7249b6142e39c02595a47f",
-                "reference": "c979b6bf804932c62c7249b6142e39c02595a47f",
+                "url": "https://api.github.com/repos/vanilla/garden-cli/zipball/baa4a0813a45bd1bbc83e9f2f5bc866182384197",
+                "reference": "baa4a0813a45bd1bbc83e9f2f5bc866182384197",
                 "shasum": ""
             },
             "require": {
@@ -232,7 +237,7 @@
                 }
             ],
             "description": "A full-featured, yet ridiculously simple commandline parser for your next php cli script. Stop fighting with getopt().",
-            "time": "2015-01-30 15:09:33"
+            "time": "2015-03-25 15:26:38"
         }
     ],
     "packages-dev": [],
