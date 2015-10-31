@@ -203,7 +203,7 @@ class Scanner
         $html = $this->getContents($pageUrl);
 
         // Create new DOMDocument using the fetched HTML
-        // (explicitly adding \Bramus\MCS\ to indicate the difference with \DOMDocuemnt)
+        // (explicitly adding \Bramus\MCS\ to indicate the difference with \DOMDocument)
         $doc = new \Bramus\MCS\DOMDocument();
 
         // Load up the HTML
