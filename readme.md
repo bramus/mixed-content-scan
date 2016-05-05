@@ -24,6 +24,8 @@ Installation is possible using Composer
 composer global require bramus/mixed-content-scan:~2.1
 ```
 
+Make sure you have [the Composer bin directory in your PATH](http://akrabat.com/global-installation-of-php-tools-with-composer/).
+
 _Don't know what this Composer thing is?_ If you don't know how to work with Composer you may download the 1.0 release from [the Releases page](https://github.com/bramus/mixed-content-scan/releases). It's a first (rough) version of MCS which also does the job.
 
 ## Usage
