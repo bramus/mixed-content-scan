@@ -89,7 +89,7 @@ if (isset($opts['input'])) {
 
     // Loop the contents and queue all URLs
     foreach ($fi as $link) {
-        if (parse_url(trim($link))) $urlsToQueue[] = trim($link);
+        if (parse_url(trim($link)) && (trim($link) != '')) $urlsToQueue[] = trim($link);
     }
 
     // Make sure `--no-crawl` is set when working with `--input-file`
