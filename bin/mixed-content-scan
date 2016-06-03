@@ -96,7 +96,7 @@ if (isset($opts['input'])) {
     $opts['no-crawl'] = true;
 
     // Give a notice if we have ignored any passed in rootUrl
-    if (isset($args[0])) $logger->addNotice('Using an input-file as source. Ignoring the passed in $rootUrl');
+    if (isset($args['rootUrl'])) $logger->addNotice('Using an input-file as source. Ignoring the passed in $rootUrl');
 
 } else {
 
