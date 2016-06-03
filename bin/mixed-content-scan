@@ -100,12 +100,12 @@ if (isset($opts['input'])) {
 
 } else {
 
-    if (!isset($args[0]) || !parse_url($args[0])) {
-        $logger->addError('Please pass (at least) 1 argument to this script, namely the URL to scan. E.g. `mixed-content-scan $url`');
+    if (!isset($args['rootUrl']) || !parse_url($args['rootUrl'])) {
+        $logger->addError('Please pass the URL to scan (rootUrl) as the 1st argument to this script. E.g. `mixed-content-scan $url`');
         exit();
     }
 
-    $rootUrl = $args[0];
+    $rootUrl = $args['rootUrl'];
 
 }
 
