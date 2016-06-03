@@ -396,6 +396,12 @@ class Scanner
         // Close it
         @curl_close($curl);
 
+        // If the headers contain `Content-Security-Policy: upgrade-insecure-requests`
+        // then the page should be skipped, as the browser will (should) then automatically
+        // upgrade all requests.
+        // @ref https://w3c.github.io/webappsec-upgrade-insecure-requests/
+        
+
         // Return the fetched contents
         return $body;
     }
