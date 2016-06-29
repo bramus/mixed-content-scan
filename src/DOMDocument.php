@@ -145,6 +145,6 @@ class DOMDocument extends \DOMDocument
         }
 
         // Return found URLs
-        return array_unique($mixedContentUrls);
+        return $mixedContentUrls;
     }
 }
