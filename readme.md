@@ -5,7 +5,7 @@
 
 Scan your HTTPS-enabled website for Mixed Content
 
-Built by Bramus! - [https://www.bram.us/](https://www.bram.us/)
+Built by Bramus! ([https://www.bram.us/](https://www.bram.us/)) and [Contributors](https://github.com/bramus/mixed-content-scan/graphs/contributors)
 
 ## About
 
@@ -13,7 +13,7 @@ Built by Bramus! - [https://www.bram.us/](https://www.bram.us/)
 
 The script starts at a given URL, and then starts processing it:
 
-*  All contained `img[src]`, `iframe[src]`, `script[src]`, `link[href][rel="stylesheet"]`, `object[data]`, and `form[action]` elements are checked for being Mixed Content or not
+*  All contained `img[src|srcset]`, `iframe[src]`, `script[src]`, `link[href][rel="stylesheet"]`, `object[data]`, `form[action]`, `embed[src]`, `video[src]`, `audio[src]`, `source[src|srcset]`, and `params[name="movie"][value]` elements are checked for being Mixed Content or not
 *  All contained `a[href]` elements linking to the same or a deeper level are successively processed for Mixed Content.
 
 ## Installation
@@ -21,7 +21,7 @@ The script starts at a given URL, and then starts processing it:
 Installation is possible using [Composer](https://getcomposer.org/)
 
 ```
-composer global require bramus/mixed-content-scan:~2.2
+composer global require bramus/mixed-content-scan:~2.3
 ```
 
 _New to Composer?_ It's a command line tool for dependency management in PHP. On Linux/Unix/OSX you will need to [download and run the install script](https://getcomposer.org/download/) and _(recommended)_ successively [move `composer.phar` to a global location](https://getcomposer.org/doc/00-intro.md#globally). On Windows you will need to [run the installer](https://getcomposer.org/doc/00-intro.md#installation-windows)
