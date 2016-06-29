@@ -46,6 +46,12 @@ class DOMDocument extends \DOMDocument
                     $mixedContentUrls[] = $url;
                 }
             }
+            if ($el->hasAttribute('srcset')) {
+                $url = $el->getAttribute('srcset');
+                if (stripos($url, "http://")) {
+                    $mixedContentUrls[] = $url;
+                }
+            }
         }
 
         // Check all script elements contained in the HTML
@@ -72,6 +78,63 @@ class DOMDocument extends \DOMDocument
         foreach ($this->getElementsByTagName('object') as $el) {
             if ($el->hasAttribute('data')) {
                 $url = $el->getAttribute('data');
+                if (substr($url, 0, 7) == "http://") {
+                    $mixedContentUrls[] = $url;
+                }
+            }
+        }
+
+        // Check all `embed` elements contained in the HTML
+        foreach ($this->getElementsByTagName('embed') as $el) {
+            if ($el->hasAttribute('src')) {
+                $url = $el->getAttribute('src');
+                if (substr($url, 0, 7) == "http://") {
+                    $mixedContentUrls[] = $url;
+                }
+            }
+        }
+
+        // Check all `video` elements contained in the HTML
+        foreach ($this->getElementsByTagName('video') as $el) {
+            if ($el->hasAttribute('src')) {
+                $url = $el->getAttribute('src');
+                if (substr($url, 0, 7) == "http://") {
+                    $mixedContentUrls[] = $url;
+                }
+            }
+        }
+
+        // Check all `audio` elements contained in the HTML
+        foreach ($this->getElementsByTagName('audio') as $el) {
+            if ($el->hasAttribute('src')) {
+                $url = $el->getAttribute('src');
+                if (substr($url, 0, 7) == "http://") {
+                    $mixedContentUrls[] = $url;
+                }
+            }
+        }
+
+        // Check all `source` elements contained in the HTML
+        foreach ($this->getElementsByTagName('source') as $el) {
+            if ($el->hasAttribute('srcset')) {
+                $url = $el->getAttribute('srcset');
+                if (substr($url, 0, 7) == "http://") {
+                    $mixedContentUrls[] = $url;
+                }
+            }
+            if ($el->hasAttribute('src')) {
+                $url = $el->getAttribute('src');
+                if (substr($url, 0, 7) == "http://") {
+                    $mixedContentUrls[] = $url;
+                }
+            }
+        }
+
+
+        // Check all `param` elements contained in the HTML
+        foreach ($this->getElementsByTagName('param') as $el) {
+            if ($el->hasAttribute('value') && $el->hasAttribute('name') && ($el->getAttribute('name') == 'movie')) {
+                $url = $el->getAttribute('value');
                 if (substr($url, 0, 7) == "http://") {
                     $mixedContentUrls[] = $url;
                 }
