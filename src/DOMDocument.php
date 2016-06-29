@@ -48,7 +48,7 @@ class DOMDocument extends \DOMDocument
             }
             if ($el->hasAttribute('srcset')) {
                 $url = $el->getAttribute('srcset');
-                if (stripos($url, "http://")) {
+                if (stripos($url, "http://") !== false) {
                     $mixedContentUrls[] = $url;
                 }
             }
@@ -124,7 +124,7 @@ class DOMDocument extends \DOMDocument
             }
             if ($el->hasAttribute('srcset')) {
                 $url = $el->getAttribute('srcset');
-                if (stripos($url, "http://")) {
+                if (stripos($url, "http://") !== false) {
                     $mixedContentUrls[] = $url;
                 }
             }
