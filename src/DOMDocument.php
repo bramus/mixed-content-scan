@@ -116,20 +116,19 @@ class DOMDocument extends \DOMDocument
 
         // Check all `source` elements contained in the HTML
         foreach ($this->getElementsByTagName('source') as $el) {
-            if ($el->hasAttribute('srcset')) {
-                $url = $el->getAttribute('srcset');
-                if (substr($url, 0, 7) == "http://") {
-                    $mixedContentUrls[] = $url;
-                }
-            }
             if ($el->hasAttribute('src')) {
                 $url = $el->getAttribute('src');
                 if (substr($url, 0, 7) == "http://") {
                     $mixedContentUrls[] = $url;
                 }
             }
+            if ($el->hasAttribute('srcset')) {
+                $url = $el->getAttribute('srcset');
+                if (stripos($url, "http://")) {
+                    $mixedContentUrls[] = $url;
+                }
+            }
         }
-
 
         // Check all `param` elements contained in the HTML
         foreach ($this->getElementsByTagName('param') as $el) {
