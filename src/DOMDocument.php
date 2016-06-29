@@ -114,7 +114,7 @@ class DOMDocument extends \DOMDocument
             }
         }
 
-        // Check all `video` elements contained in the HTML
+        // Check all `source` elements contained in the HTML
         foreach ($this->getElementsByTagName('source') as $el) {
             if ($el->hasAttribute('srcset')) {
                 $url = $el->getAttribute('srcset');
