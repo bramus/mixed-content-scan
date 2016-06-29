@@ -122,7 +122,14 @@ class DOMDocument extends \DOMDocument
                     $mixedContentUrls[] = $url;
                 }
             }
+            if ($el->hasAttribute('src')) {
+                $url = $el->getAttribute('src');
+                if (substr($url, 0, 7) == "http://") {
+                    $mixedContentUrls[] = $url;
+                }
+            }
         }
+
 
         // Check all `param` elements contained in the HTML
         foreach ($this->getElementsByTagName('param') as $el) {
