@@ -21,7 +21,7 @@ The script starts at a given URL, and then starts processing it:
 Installation is possible using [Composer](https://getcomposer.org/)
 
 ```
-composer global require bramus/mixed-content-scan:~2.3
+composer global require bramus/mixed-content-scan:~2.4
 ```
 
 _New to Composer?_ It's a command line tool for dependency management in PHP. On Linux/Unix/OSX you will need to [download and run the install script](https://getcomposer.org/download/) and _(recommended)_ successively [move `composer.phar` to a global location](https://getcomposer.org/doc/00-intro.md#globally). On Windows you will need to [run the installer](https://getcomposer.org/doc/00-intro.md#installation-windows)
