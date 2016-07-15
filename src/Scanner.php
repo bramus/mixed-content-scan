@@ -15,10 +15,16 @@ class Scanner
     private $crawl = true;
 
     /**
-     * Do we check the certificates for being valid or not (true = allow self signed)
+     * Do we check the certificates for being valid or not (false = allow self signed, or missing certificates)
      * @var boolean
      */
     private $checkCertificate = true;
+
+    /**
+     * How long we will wait (in milliseconds) for each request to execute.
+     * @var int
+     */
+    private $timeout = 10000;
 
     /**
      * Logger
@@ -357,8 +363,9 @@ class Scanner
             CURLOPT_FOLLOWLOCATION => 1,
             CURLOPT_HEADER => 1, // Return both response head and response body, not only the response body
             CURLOPT_URL => $pageUrl,
-            CURLOPT_TIMEOUT_MS => 10000,
-            CURLOPT_SSL_VERIFYPEER => $this->checkCertificate
+            CURLOPT_TIMEOUT_MS => $this->timeout,
+            CURLOPT_SSL_VERIFYPEER => $this->checkCertificate,
+            CURLOPT_SSL_VERIFYHOST => $this->getVerifyHost(),
         ));
 
         // Fetch the response (both head and body)
@@ -428,7 +435,7 @@ class Scanner
      * Get checkCertificate value
      * @return boolean
      */
-    public function getCheckCertifate()
+    public function getCheckCertificate()
     {
         return $this->checkCertificate;
     }
@@ -440,5 +447,36 @@ class Scanner
     public function setCheckCertificate($checkCertificate)
     {
         $this->checkCertificate = (bool) $checkCertificate;
+    }
+
+    /**
+     * Get verifyHost value
+     * @return int
+     */
+    public function getVerifyHost()
+    {
+        if ($this->checkCertificate) {
+            return 2;
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * Get timeout value
+     * @return int
+     */
+    public function getTimeout()
+    {
+        return $this->timeout;
+    }
+
+    /**
+     * Set timeout value
+     * @param int
+     */
+    public function setTimeout($timeout)
+    {
+        $this->timeout = $timeout;
     }
 }
