@@ -31,6 +31,7 @@ $cli->description('Scan your HTTPS-enabled website for Mixed Content.')
     ->opt('format', 'Output format to use. Allowed values: `ansi`, `no-ansi`, or `json`. Defaults to `ansi`', false)
     ->opt('no-crawl', 'Don\'t crawl scanned pages for new pages.', false)
     ->opt('no-check-certificate', 'Don\'t check the certificate for validity.', false)
+    ->opt('timeout', 'How long to wait for each request to complete. Defaults to 10000ms.', false, 'integer')
     ->opt('input', 'Specify a file containing a list of links as the source, instead of parsing the passed in URL. Automatically enables `--no-crawl`', false)
     ->opt('ignore', 'File containing URL patterns to ignore. See readme shipping with release on how to build this file.', false)
     ->arg('rootUrl', 'The URL to start scanning at', false);
@@ -138,17 +139,29 @@ if (isset($opts['no-crawl'])) {
     $crawl = true;
 }
 
-// Do we need to crawl or not?
+// Do we need to check the certificate or not?
 if (isset($opts['no-check-certificate'])) {
     $checkCertificate = false;
 } else {
     $checkCertificate = true;
 }
 
+// Set the timeout value for each request
+if (isset($opts['timeout'])) {
+    $timeout = $opts['timeout'];
+    if (!(is_numeric($timeout) && $timeout > 0 && $timeout == round($timeout, 0))) {
+        $timeout = 10000;
+        $logger->addNotice('Invalid timeout value specified. Using default value of 10000ms.');
+    }
+} else {
+    $timeout = 10000;
+}
+
 // Go for it!
 try {
     $scanner = new \Bramus\MCS\Scanner($rootUrl, $logger, (array) $ignorePatterns);
     $scanner->setCrawl($crawl);
+    $scanner->setTimeout($timeout);
     $scanner->setCheckCertificate($checkCertificate);
     if (sizeof($urlsToQueue) > 0) $scanner->queueUrls($urlsToQueue);
     $scanner->scan();
