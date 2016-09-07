@@ -262,21 +262,16 @@ class Scanner
 
         // If the URL should not be ignored (pattern matching) and isn't added to the list yet, add it to the list of pages to scan.
         if ((preg_match('#^'.$this->rootUrlBasePath.'#i', $url) === 1) && !in_array($url, $this->pages)) {
-            $ignorePatternMatched = false;
             foreach ($this->ignorePatterns as $p) {
                 if ($p && preg_match('#'.$p.'#i', $url)) {
-                    $ignorePatternMatched = true;
-
                     return false;
                 }
             }
 
-            if (!$ignorePatternMatched) {
-                $this->pages[] = $url;
-                $this->logger->addDebug('Queued '.$url);
+            $this->pages[] = $url;
+            $this->logger->addDebug('Queued '.$url);
 
-                return true;
-            }
+            return true;
         }
 
         // Not queued
