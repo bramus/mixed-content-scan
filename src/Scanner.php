@@ -2,6 +2,9 @@
 
 namespace Bramus\MCS;
 
+use Exception;
+use Monolog\Logger;
+
 /**
  * MCS\Scanner - A scanner class to crawl+scan HTTPS-enabled websites for Mixed Content.
  * @author Bramus! <bramus@bram.us>
@@ -28,54 +31,57 @@ class Scanner
 
     /**
      * Logger
-     * @var Object
+     * @var Logger
      */
     private $logger;
 
     /**
      * The root URL to start scanning at
-     * @var String
+     * @var string
      */
     private $rootUrl;
 
     /**
      * The Base path of the root URL
-     * @var String
+     * @var string
      */
     private $rootUrlBasePath;
 
     /**
      * The URL parts of the root URL, as parsed by parse_url()
-     * @var Array
+     * @var string[]
      */
     private $rootUrlParts;
 
     /**
      * Array of all pages scanned / about to be scanned
-     * @var Array
+     * @var string[]
      */
     private $pages = [];
 
     /**
      * Array of patterns in URLs to ignore to fetch content from
-     * @var  Array
+     * @var string[]
      */
     private $ignorePatterns = [];
 
     /**
      * Create a new Scanner instance.
-     * @param String $rootUrl The (root)URL to start scanning
+     *
+     * @param  string    $rootUrl The (root)URL to start scanning
+     * @param  Logger    $logger
+     * @param  string[]  $ignorePatterns
+     * @throws Exception If the cURL extension is not installed or enabled
      */
     public function __construct($rootUrl, $logger, $ignorePatterns)
     {
-
         // Store logger
         $this->logger = $logger;
 
         // Make sure Curl is installed and enabled
         if (!function_exists('curl_init')) {
-            $this->logger->addEmergency('The required PHP curl extension is not installed or enabled');
-            throw new \Exception('The required PHP curl extension is not installed or enabled');
+            $this->logger->addEmergency('The required PHP cUrl extension is not installed or enabled');
+            throw new Exception('The required PHP cUrl extension is not installed or enabled');
         }
 
         // Store the rootUrl
@@ -87,8 +93,9 @@ class Scanner
 
     /**
      * Sets the root URL of the website to scan
-     * @param String
-     * @param boolean
+     * @param  string    $rootUrl
+     * @param  bool      $limitToPath
+     * @throws Exception If the root URL is invalid
      */
     private function setRootUrl($rootUrl, $limitToPath = true)
     {
@@ -103,7 +110,7 @@ class Scanner
         $urlParts = parse_url($rootUrl);
         if (!$urlParts || !isset($urlParts['scheme']) || !isset($urlParts['host'])) {
             $this->logger->addEmergency('Invalid rootUrl!');
-            throw new \Exception('Invalid rootUrl!');
+            throw new Exception('Invalid rootUrl!');
         }
 
         // Force trailing / on rootUrl, it's easier for us to work with it
@@ -200,8 +207,8 @@ class Scanner
 
     /**
      * Scan a single URL
-     * @param  String $pageUrl URL of the page to scan
-     * @return array
+     * @param  string $pageUrl URL of the page to scan
+     * @return string[]
      */
     private function scanPage($pageUrl)
     {
@@ -238,7 +245,7 @@ class Scanner
 
     /**
      * Queue an array of URLs
-     * @param  array
+     * @param  string[] $urls
      * @return void
      */
     public function queueUrls(array $urls)
@@ -250,7 +257,7 @@ class Scanner
 
     /**
      * Queues an URL onto the queue if not queued yet
-     * @param  String
+     * @param  string
      * @return bool
      */
     public function queueUrl($url)
@@ -285,9 +292,9 @@ class Scanner
 
     /**
      * Make a given URL absolute
-     * @param  String $linkedUrl      The URL linked to
-     * @param  String $currentPageUrl The URL of the page holding the URL linked to
-     * @return String
+     * @param  string $linkedUrl      The URL linked to
+     * @param  string $currentPageUrl The URL of the page holding the URL linked to
+     * @return string
      */
     private function absolutizeUrl($linkedUrl, $currentPageUrl)
     {
@@ -329,9 +336,9 @@ class Scanner
 
     /**
      * Remove ../ and ./ from a given URL
-     * @see  http://php.net/manual/en/function.realpath.php#71334
-     * @param  String
-     * @return String
+     * @see    http://php.net/manual/en/function.realpath.php#71334
+     * @param  string
+     * @return string
      */
     private function canonicalize($url)
     {
@@ -350,8 +357,8 @@ class Scanner
 
     /**
      * Get the contents of a given URL (via GET)
-     * @param  String $pageUrl The URL of the page to get the contents of
-     * @return String
+     * @param  string $pageUrl The URL of the page to get the contents of
+     * @return string
      */
     private function getContents(&$pageUrl)
     {
