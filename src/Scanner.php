@@ -272,8 +272,6 @@ class Scanner
             $ignorePatternMatched = false;
             foreach ($this->ignorePatterns as $p) {
                 if ($p && preg_match('#'.$p.'#i', $url)) {
-                    $ignorePatternMatched = true;
-
                     return false;
                 }
             }
