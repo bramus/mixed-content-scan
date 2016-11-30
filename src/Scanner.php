@@ -368,6 +368,7 @@ class Scanner
             CURLOPT_TIMEOUT_MS => $this->timeout,
             CURLOPT_SSL_VERIFYPEER => $this->checkCertificate,
             CURLOPT_SSL_VERIFYHOST => $this->getVerifyHost(),
+            CURLOPT_USERAGENT => 'mixed-content-scan',
         ));
 
         // Fetch the response (both head and body)
