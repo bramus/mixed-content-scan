@@ -92,7 +92,8 @@ class Scanner
     }
 
     /**
-     * Sets the root URL of the website to scan
+     * Sets the root URL of the website to scan.
+     *
      * @param  string    $rootUrl
      * @param  bool      $limitToPath
      * @throws Exception If the root URL is invalid
@@ -101,20 +102,20 @@ class Scanner
     {
 
         // If the rootUrl is *, it means that we'll pass in some URLs manually
-        if ($rootUrl == '*') {
+        if ($rootUrl === '*') {
             $this->rootUrl = $rootUrl;
             return;
         }
 
         // Make sure the rootUrl is parse-able
         $urlParts = parse_url($rootUrl);
-        if (!$urlParts || !isset($urlParts['scheme']) || !isset($urlParts['host'])) {
+        if (!$urlParts || !isset($urlParts['scheme'], $urlParts['host'])) {
             $this->logger->addEmergency('Invalid rootUrl!');
             throw new Exception('Invalid rootUrl!');
         }
 
         // Force trailing / on rootUrl, it's easier for us to work with it
-        if (substr($rootUrl, -1) != '/') {
+        if (substr($rootUrl, -1) !== '/') {
             $rootUrl .= '/';
         }
 
@@ -124,7 +125,9 @@ class Scanner
         // store rootUrl without queryString
         // If we need to limit to the path of the URL (viz. at first run): take that one into account
         // Otherwise keep the already set path
-        $this->rootUrlBasePath = $urlParts['scheme'].'://'.$urlParts['host'].($limitToPath ? $urlParts['path'] : $this->rootUrlParts['path']);
+        $this->rootUrlBasePath = $urlParts['scheme'].'://'.$urlParts['host'].($limitToPath ?
+                $urlParts['path'] :
+                $this->rootUrlParts['path']);
 
         if (!$limitToPath) {
             $this->logger->addNotice('Updated rootUrl to '.$this->rootUrl);
@@ -135,10 +138,16 @@ class Scanner
         $this->rootUrlParts = $urlParts;
     }
 
+    /**
+     * Sets the patterns to be ignored.
+     *
+     * @param array  $ignorePatterns
+     * @param string $toReplace
+     */
     public function setIgnorePatterns($ignorePatterns, $toReplace = '{$rootUrl}')
     {
         // Force trailing / on $toReplace
-        if (substr($toReplace, -1) != '/') {
+        if (substr($toReplace, -1) !== '/') {
             $toReplace .= '/';
         }
 
@@ -160,7 +169,7 @@ class Scanner
     public function scan()
     {
         // Add the root URL to the list of pages
-        if ($this->rootUrl != '*') {
+        if ($this->rootUrl !== '*') {
             $this->pages[] = $this->rootUrl;
         }
 
@@ -186,15 +195,12 @@ class Scanner
                 foreach ($mixedContent as $url) {
                     $this->logger->addWarning($url);
                 }
-            }
-
-            // No mixed content
-            else {
+            } else { // No mixed content
                 $this->logger->addInfo(sprintf('%05d', $curPageIndex).' - '.$curPageUrl);
             }
 
             // Done scanning all pages? Then quit! Otherwise: scan the next page
-            if ($curPageIndex+1 == sizeof($this->pages)) {
+            if ($curPageIndex+1 === count($this->pages)) {
                 break;
             } else {
                 $curPageIndex++;
@@ -202,7 +208,7 @@ class Scanner
         }
 
         // Give feedback on the CLI
-        $this->logger->addNotice('Scanned '.sizeof($this->pages).' pages for Mixed Content');
+        $this->logger->addNotice('Scanned '.count($this->pages).' pages for Mixed Content');
     }
 
     /**
@@ -267,8 +273,9 @@ class Scanner
             $url = substr($url, 0, strpos($url, '#'));
         }
 
-        // If the URL should not be ignored (pattern matching) and isn't added to the list yet, add it to the list of pages to scan.
-        if ((preg_match('#^'.$this->rootUrlBasePath.'#i', $url) === 1) && !in_array($url, $this->pages)) {
+        // If the URL should not be ignored (pattern matching) and isn't added
+        // to the list yet, add it to the list of pages to scan.
+        if ((preg_match('#^'.$this->rootUrlBasePath.'#i', $url) === 1) && !in_array($url, $this->pages, true)) {
             foreach ($this->ignorePatterns as $p) {
                 if ($p && preg_match('#'.$p.'#i', $url)) {
                     return false;
@@ -295,32 +302,35 @@ class Scanner
     {
         // Absolute URLs
         // --> Don't change
-        if (substr($linkedUrl, 0, 8) == "https://" || substr($linkedUrl, 0, 7) == "http://") {
+        if (0 === strpos($linkedUrl, 'https://') || 0 === strpos($linkedUrl, 'http://')) {
             return $this->canonicalize($linkedUrl);
         }
 
         // Protocol relative URLs
         // --> Prepend scheme
-        if (substr($linkedUrl, 0, 2) == "//") {
+        if (0 === strpos($linkedUrl, '//')) {
             return $this->canonicalize($this->rootUrlParts['scheme'].':'.$linkedUrl);
         }
 
         // Root-relative URLs
         // --> Prepend scheme and host
-        if (substr($linkedUrl, 0, 1) == "/") {
-            return $this->canonicalize($this->rootUrlParts['scheme'].'://'.$this->rootUrlParts['host'].'/'.substr($linkedUrl, 1));
+        if (0 === strpos($linkedUrl, '/')) {
+            return $this->canonicalize($this->rootUrlParts['scheme'].'://'.
+                                       $this->rootUrlParts['host'].'/'.substr($linkedUrl, 1));
         }
 
         // Document fragment
         // --> Don't scan it
-        if (substr($linkedUrl, 0, 1) == "#") {
+        if (0 === strpos($linkedUrl, '#')) {
             return '';
         }
 
         // Links that are not http or https (e.g. mailto:, tel:)
         // --> Don't scan it
         $linkedUrlParts = parse_url($linkedUrl);
-        if (isset($linkedUrlParts['scheme']) && !in_array($linkedUrlParts['scheme'], array('http', 'https', ''))) {
+        if (isset($linkedUrlParts['scheme']) &&
+            !in_array($linkedUrlParts['scheme'], ['http', 'https', ''], true)
+        ) {
             return '';
         }
 
@@ -360,7 +370,7 @@ class Scanner
         // Init CURL
         $curl = curl_init();
 
-        @curl_setopt_array($curl, array(
+        @curl_setopt_array($curl, [
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_FOLLOWLOCATION => 1,
             CURLOPT_HEADER => 1, // Return both response head and response body, not only the response body
@@ -369,7 +379,7 @@ class Scanner
             CURLOPT_SSL_VERIFYPEER => $this->checkCertificate,
             CURLOPT_SSL_VERIFYHOST => $this->getVerifyHost(),
             CURLOPT_USERAGENT => 'mixed-content-scan',
-        ));
+        ]);
 
         // Fetch the response (both head and body)
         $response = curl_exec($curl);
@@ -377,10 +387,10 @@ class Scanner
         // Fetch the URL of the page we actually fetched
         $newUrl = curl_getinfo($curl, CURLINFO_EFFECTIVE_URL);
 
-        if ($newUrl != $pageUrl) {
+        if ($newUrl !== $pageUrl) {
             // If we started at the rootURL, and it got redirected:
             // --> overwrite the rootUrl so that we use the new one from now on
-            if ($pageUrl == $this->rootUrl) {
+            if ($pageUrl === $this->rootUrl) {
                 // Store the new rootUrl
                 $this->setRootUrl($newUrl, false);
 
