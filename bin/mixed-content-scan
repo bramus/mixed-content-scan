@@ -51,7 +51,7 @@ if (!isset($opts['format'])) $opts['format'] = 'ansi';
 switch($opts['format']) {
 
     case 'no-ansi':
-        $formatter = new \Monolog\Formatter\LineFormatter();
+        $formatter = new \Monolog\Formatter\LineFormatter(null, null, false, true);
         break;
 
     case 'json':
@@ -60,7 +60,7 @@ switch($opts['format']) {
 
     case 'ansi':
     default:
-        $formatter = new \Bramus\Monolog\Formatter\ColoredLineFormatter();
+        $formatter = new \Bramus\Monolog\Formatter\ColoredLineFormatter(null, null, null, false, true);
         break;
 
 }
