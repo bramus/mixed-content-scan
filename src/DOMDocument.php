@@ -8,6 +8,11 @@ namespace Bramus\MCS;
  */
 class DOMDocument extends \DOMDocument
 {
+    /**
+     * Collection that indicate sources of element attribute values we want to check.
+     *
+     * @var array
+     */
     public $tags = [
         'audio'  => ['src'],
         'embed'  => ['src'],
@@ -22,11 +27,16 @@ class DOMDocument extends \DOMDocument
         'video'  => ['src']
     ];
 
+    /**
+     * Loop all links and extract their href value.
+     *
+     * @return array All href values.
+     */
     public function extractLinks()
     {
         $links = [];
 
-        // Loop all links and extract their href value
+        /** @var \DOMElement $el */
         foreach ($this->getElementsByTagName('a') as $el) {
             if ($el->hasAttribute('href')) {
                 $links[] = $el->getAttribute('href');
@@ -36,6 +46,11 @@ class DOMDocument extends \DOMDocument
         return $links;
     }
 
+    /**
+     * Extract URLs which are found to be Mixed Content.
+     *
+     * @return array URLs
+     */
     public function extractMixedContentUrls()
     {
         // Array holding all URLs which are found to be Mixed Content
@@ -45,7 +60,9 @@ class DOMDocument extends \DOMDocument
         // Loop through all the tags and attributes we want to find
         // references to mixed content
         foreach ($this->tags as $tag => $attributes) {
+            /** @var \DOMElement $el */
             foreach ($this->getElementsByTagName($tag) as $el) {
+                /** @var array $attributes */
                 foreach ($attributes as $attribute) {
                     if ($el->hasAttribute($attribute)) {
                         $url = $el->getAttribute($attribute);
