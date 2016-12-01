@@ -3,7 +3,7 @@
 namespace Bramus\MCS;
 
 use Exception;
-use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 
 /**
  * MCS\Scanner - A scanner class to crawl+scan HTTPS-enabled websites for Mixed Content.
@@ -68,19 +68,19 @@ class Scanner
     /**
      * Create a new Scanner instance.
      *
-     * @param  string    $rootUrl The (root)URL to start scanning
-     * @param  Logger    $logger
-     * @param  string[]  $ignorePatterns
+     * @param  string          $rootUrl The (root)URL to start scanning
+     * @param  LoggerInterface $logger
+     * @param  string[]        $ignorePatterns
      * @throws Exception If the cURL extension is not installed or enabled
      */
-    public function __construct($rootUrl, $logger, $ignorePatterns)
+    public function __construct($rootUrl, LoggerInterface $logger, $ignorePatterns)
     {
         // Store logger
         $this->logger = $logger;
 
         // Make sure Curl is installed and enabled
         if (!function_exists('curl_init')) {
-            $this->logger->addEmergency('The required PHP cUrl extension is not installed or enabled');
+            $this->logger->emergency('The required PHP cUrl extension is not installed or enabled');
             throw new Exception('The required PHP cUrl extension is not installed or enabled');
         }
 
@@ -109,8 +109,9 @@ class Scanner
 
         // Make sure the rootUrl is parse-able
         $urlParts = parse_url($rootUrl);
+
         if (!$urlParts || !isset($urlParts['scheme'], $urlParts['host'])) {
-            $this->logger->addEmergency('Invalid rootUrl!');
+            $this->logger->emergency('Invalid rootUrl!');
             throw new Exception('Invalid rootUrl!');
         }
 
@@ -130,8 +131,8 @@ class Scanner
                 $this->rootUrlParts['path']);
 
         if (!$limitToPath) {
-            $this->logger->addNotice('Updated rootUrl to '.$this->rootUrl);
-            $this->logger->addNotice('Updated rootUrlBasePath to '.$this->rootUrlBasePath);
+            $this->logger->notice('Updated rootUrl to '.$this->rootUrl);
+            $this->logger->notice('Updated rootUrlBasePath to '.$this->rootUrlBasePath);
         }
 
         // store urlParts
@@ -152,13 +153,13 @@ class Scanner
         }
 
         // Store ignorepatterns
-        $this->logger->addDebug('Store ignore patterns '.$p);
+        $this->logger->debug('Store ignore patterns '.$p);
         $this->ignorePatterns = (array) $ignorePatterns;
 
         // Replace {$rootUrl} in the ignorepatterns
         foreach ($this->ignorePatterns as &$p) {
             $p = str_replace($toReplace, $this->rootUrl, $p);
-            $this->logger->addDebug('Add ignore pattern '.$p);
+            $this->logger->debug('Add ignore pattern '.$p);
         }
     }
 
@@ -174,7 +175,7 @@ class Scanner
         }
 
         // Give feedback on the CLI
-        $this->logger->addNotice('Scanning '.$this->rootUrl);
+        $this->logger->notice('Scanning '.$this->rootUrl);
 
         // Current index at $this->pages
         $curPageIndex = 0;
@@ -190,13 +191,13 @@ class Scanner
             // Got mixed content
             if ($mixedContent) {
                 // Add an alert for the URL
-                $this->logger->addError(sprintf('%05d', $curPageIndex).' - '.$curPageUrl);
+                $this->logger->error(sprintf('%05d', $curPageIndex).' - '.$curPageUrl);
 
                 foreach ($mixedContent as $url) {
-                    $this->logger->addWarning($url);
+                    $this->logger->warning($url);
                 }
             } else { // No mixed content
-                $this->logger->addInfo(sprintf('%05d', $curPageIndex).' - '.$curPageUrl);
+                $this->logger->info(sprintf('%05d', $curPageIndex).' - '.$curPageUrl);
             }
 
             // Done scanning all pages? Then quit! Otherwise: scan the next page
@@ -208,7 +209,7 @@ class Scanner
         }
 
         // Give feedback on the CLI
-        $this->logger->addNotice('Scanned '.count($this->pages).' pages for Mixed Content');
+        $this->logger->notice('Scanned '.count($this->pages).' pages for Mixed Content');
     }
 
     /**
@@ -283,7 +284,7 @@ class Scanner
             }
 
             $this->pages[] = $url;
-            $this->logger->addDebug('Queued '.$url);
+            $this->logger->debug('Queued '.$url);
 
             return true;
         }
@@ -406,7 +407,7 @@ class Scanner
         $curl_errno = curl_errno($curl);
         $curl_error = curl_error($curl);
         if ($curl_errno > 0) {
-            $this->logger->addCritical('cURL Error ('.$curl_errno.'): '.$curl_error);
+            $this->logger->critical('cURL Error ('.$curl_errno.'): '.$curl_error);
         }
 
         // Extract the response head and response body from the response
@@ -420,7 +421,7 @@ class Scanner
         // then the page should be skipped, as the browser will (should) then automatically
         // upgrade all requests.
         // @ref https://w3c.github.io/webappsec-upgrade-insecure-requests/
-        
+
 
         // Return the fetched contents
         return $body;
