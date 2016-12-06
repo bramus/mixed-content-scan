@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": ">=5.4",
-        "monolog/monolog": "~1.0",
+        "monolog/monolog": "~1.11",
         "bramus/monolog-colored-line-formatter": "~2.0",
         "vanilla/garden-cli": "~1.3"
     },
