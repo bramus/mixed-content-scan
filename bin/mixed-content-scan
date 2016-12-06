@@ -26,7 +26,7 @@ if (file_exists(__DIR__ . '/../vendor/autoload.php')) { // Installed Locally
 $cli = new \Garden\Cli\Cli();
 
 $cli->description('Scan your HTTPS-enabled website for Mixed Content.')
-    ->opt('loglevel', 'The Monolog loglevel to log at. Defaults to 200.', false, 'integer')
+    ->opt('loglevel', 'The Monolog loglevel to log at. Defaults to 200.', false)
     ->opt('output', 'Stream to write to. Defaults to `php://stdout`', false)
     ->opt('format', 'Output format to use. Allowed values: `ansi`, `no-ansi`, or `json`. Defaults to `ansi`', false)
     ->opt('no-crawl', 'Don\'t crawl scanned pages for new pages.', false)
@@ -40,8 +40,16 @@ $cli->description('Scan your HTTPS-enabled website for Mixed Content.')
 $opts = $cli->parse($argv, true)->getOpts();
 $args = $cli->parse($argv, true)->getArgs();
 
-// Create logger writing to the specified output
+// Determine numerical log level
+if (isset($opts['loglevel']) && !is_int($opts['loglevel'])) {
+    $levels = \Monolog\Logger::getLevels();
+    if (array_key_exists(strtoupper($opts['loglevel']), $levels)) {
+        $opts['loglevel'] = $levels[ strtoupper($opts['loglevel']) ];
+    }
+}
 $loglevel = isset($opts['loglevel']) ? (int) $opts['loglevel'] : 200;
+
+// Create logger writing to the specified output
 $logger = new \Monolog\Logger('MCS');
 $handler = new \Monolog\Handler\StreamHandler((isset($opts['output']) ? $opts['output'] : 'php://stdout'), $loglevel);
 
