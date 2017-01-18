@@ -34,6 +34,7 @@ $cli->description('Scan your HTTPS-enabled website for Mixed Content.')
     ->opt('timeout', 'How long to wait for each request to complete. Defaults to 10000ms.', false, 'integer')
     ->opt('input', 'Specify a file containing a list of links as the source, instead of parsing the passed in URL. Automatically enables `--no-crawl`', false)
     ->opt('ignore', 'File containing URL patterns to ignore. See readme shipping with release on how to build this file.', false)
+    ->opt('user-agent', 'Set the user agent to be used when crawling', false)
     ->arg('rootUrl', 'The URL to start scanning at', false);
 
 // Parse and return cli options
@@ -166,12 +167,20 @@ if (isset($opts['timeout'])) {
     $timeout = 10000;
 }
 
+// Set the user agent to use when crawling
+if (isset($opts['user-agent'])) {
+    $userAgent = $opts['user-agent'] .' mixed-content-scan';
+} else {
+    $userAgent = 'mixed-content-scan';
+}
+
 // Go for it!
 try {
     $scanner = new \Bramus\MCS\Scanner($rootUrl, $logger, (array) $ignorePatterns);
     $scanner->setCrawl($crawl);
     $scanner->setTimeout($timeout);
     $scanner->setCheckCertificate($checkCertificate);
+    $scanner->setUserAgent($userAgent);
     if (sizeof($urlsToQueue) > 0) $scanner->queueUrls($urlsToQueue);
     $scanner->scan();
 } catch(\Exception $e) {

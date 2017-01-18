@@ -379,7 +379,7 @@ class Scanner
             CURLOPT_TIMEOUT_MS => $this->timeout,
             CURLOPT_SSL_VERIFYPEER => $this->checkCertificate,
             CURLOPT_SSL_VERIFYHOST => $this->getVerifyHost(),
-            CURLOPT_USERAGENT => 'mixed-content-scan',
+            CURLOPT_USERAGENT => $this->getUserAgent(),
         ]);
 
         // Fetch the response (both head and body)
@@ -492,5 +492,23 @@ class Scanner
     public function setTimeout($timeout)
     {
         $this->timeout = $timeout;
+    }
+
+    /**
+     * Get user agent value
+     * @return string
+     */
+    public function getUserAgent()
+    {
+        return $this->userAgent;
+    }
+
+    /**
+     * Set user agent value
+     * @param string
+     */
+    public function setUserAgent($userAgent)
+    {
+        $this->userAgent = $userAgent;
     }
 }
