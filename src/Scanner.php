@@ -115,9 +115,12 @@ class Scanner
             throw new Exception('Invalid rootUrl!');
         }
 
-        // Force trailing / on rootUrl, it's easier for us to work with it
-        if (substr($rootUrl, -1) !== '/') {
-            $rootUrl .= '/';
+        // Force trailing / on rootUrl unless it has a file extension, it's easier for us to work with it
+        $rootUrlPath = explode('/', parse_url($rootUrl)['path']);
+        if (strpos(array_reverse($rootUrlPath)[0], '.') === false) {
+            if (substr($rootUrl, -1) !== '/') {
+                $rootUrl .= '/';
+            }
         }
 
         // store rootUrl
@@ -512,3 +515,4 @@ class Scanner
         $this->userAgent = $userAgent;
     }
 }
+
