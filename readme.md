@@ -97,6 +97,7 @@ Mixed Content Scan support several CLI options which can manipulate its behavior
 - `--input=path/to/file`: Specify a file containing a list of links as the source, instead of parsing the passed in URL. Automatically enables `--no-crawl`
 - `--ignore=path/to/file`: File containing URL patterns to ignore. See _Ignoring links_ further down on how to build this file.
 - `--loglevel=level`: The Monolog loglevel to log at. Defaults to `200` (= `info`). Both numeric values, as string (lowercase) values are supported as input. See [Monolog Log Levels](https://github.com/Seldaek/monolog/blob/master/doc/01-usage.md#log-levels) for more info.
+- `--user-agent='user-agent'`: Set the user agent to be used when crawling.
 
 Example: `mixed-content-scan https://www.bram.us/ --ignore=./wordpress.txt --output=./results.txt --format=no-ansi`
 
