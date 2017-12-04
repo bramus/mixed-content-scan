@@ -27,7 +27,7 @@ composer global require bramus/mixed-content-scan:~2.8
 _New to Composer?_ It's a command line tool for dependency management in PHP. On Linux/Unix/OSX you will need to [download and run the install script](https://getcomposer.org/download/) and _(recommended)_ successively [move `composer.phar` to a global location](https://getcomposer.org/doc/00-intro.md#globally). On Windows you will need to [run the installer](https://getcomposer.org/doc/00-intro.md#installation-windows)
 
 ## Setting your $PATH (if needed)
-If mixed-content-scan installs correctly, it will be found in ~/.composer/vendor/bin/, and can be run directly from there (e.g. run ~/.composer/vendor/bin/mixed-content-scan https://www.example.com/).
+If mixed-content-scan installs correctly, it should be found in ~/.composer/vendor/bin/, and can be run directly from there (e.g. run ~/.composer/vendor/bin/mixed-content-scan https://www.example.com/). (Alternatively it may install into ~/.config/composer/vendor/bin or another location - just add the correct folder to your $PATH)
 
 If your $PATH variable does not already include this folder, you can add the following snippet to ~/.bash_profile (if the file does not exist, you may create it):
 ```
