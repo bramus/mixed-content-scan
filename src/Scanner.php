@@ -30,6 +30,12 @@ class Scanner
     private $timeout = 10000;
 
     /**
+     * How long of a delay (in seconds) between each request, for rate-throttling
+     * @var int
+     */
+    private $delay = 0;
+
+    /**
      * Logger
      * @var Logger
      */
@@ -209,6 +215,7 @@ class Scanner
             } else {
                 $curPageIndex++;
             }
+	    sleep($this->getDelay());
         }
 
         // Give feedback on the CLI
@@ -498,6 +505,24 @@ class Scanner
     }
 
     /**
+     * Get delay value
+     * @return int
+     */
+    public function getDelay()
+    {
+        return $this->delay;
+    }
+
+    /**
+     * Set delay value
+     * @param int
+     */
+    public function setDelay($delay)
+    {
+        $this->delay = $delay;
+    }
+
+   /**
      * Get user agent value
      * @return string
      */
