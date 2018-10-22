@@ -18,7 +18,7 @@ class DOMDocument extends \DOMDocument
         'embed'  => ['src'],
         'form'   => ['action'],
         'iframe' => ['src'],
-        'img'    => ['src', 'srcset'],
+        'img'    => ['src', 'srcset', 'data-src'],
         'link'   => ['href'],
         'object' => ['data'],
         'param'  => ['value'],
