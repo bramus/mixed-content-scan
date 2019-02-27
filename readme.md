@@ -1,6 +1,6 @@
 # Mixed Content Scan
 
-![Source](http://img.shields.io/badge/source-bramus/mixed--content--scan-blue.svg?style=flat-square) ![Version](https://img.shields.io/packagist/v/bramus/mixed-content-scan.svg?style=flat-square) ![Downloads](https://img.shields.io/packagist/dt/bramus/mixed-content-scan.svg?style=flat-square) ![License](https://img.shields.io/packagist/l/bramus/mixed-content-scan.svg?style=flat-square)
+[![Source](http://img.shields.io/badge/source-bramus/mixed--content--scan-blue.svg?style=flat-square)](https://github.com/bramus/mixed-content-scan) [![Version](https://img.shields.io/packagist/v/bramus/mixed-content-scan.svg?style=flat-square)](https://packagist.org/packages/bramus/mixed-content-scan) [![Downloads](https://img.shields.io/packagist/dt/bramus/mixed-content-scan.svg?style=flat-square)](https://packagist.org/packages/bramus/mixed-content-scan/stats) [![License](https://img.shields.io/packagist/l/bramus/mixed-content-scan.svg?style=flat-square)](https://github.com/bramus/mixed-content-scan/blob/master/LICENSE.txt)
 
 
 Scan your HTTPS-enabled website for Mixed Content
