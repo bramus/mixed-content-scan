@@ -13,7 +13,7 @@ Built by Bramus! ([https://www.bram.us/](https://www.bram.us/)) and [Contributor
 
 The script starts at a given URL, and then starts processing it:
 
-*  All contained `img[src|srcset]`, `iframe[src]`, `script[src]`, `link[href][rel="stylesheet"]`, `object[data]`, `form[action]`, `embed[src]`, `video[src]`, `audio[src]`, `source[src|srcset]`, and `params[name="movie"][value]` elements are checked for being Mixed Content or not
+*  All contained `img[src|srcset|data-src]`, `iframe[src]`, `script[src]`, `link[href][rel="stylesheet"]`, `object[data]`, `form[action]`, `embed[src]`, `video[src]`, `audio[src]`, `source[src|srcset]`, and `params[name="movie"][value]` elements are checked for being Mixed Content or not
 *  All contained `a[href]` elements linking to the same or a deeper level are successively processed for Mixed Content.
 
 ## Installation
