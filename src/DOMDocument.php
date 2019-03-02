@@ -62,6 +62,11 @@ class DOMDocument extends \DOMDocument
         foreach ($this->tags as $tag => $attributes) {
             /** @var \DOMElement $el */
             foreach ($this->getElementsByTagName($tag) as $el) {
+                
+                if ($tag == 'link' && $el->hasAttribute('rel') && ($el->getAttribute('rel') !== 'stylesheet')) {
+                    continue;
+                }
+                
                 /** @var array $attributes */
                 foreach ($attributes as $attribute) {
                     if ($el->hasAttribute($attribute)) {
