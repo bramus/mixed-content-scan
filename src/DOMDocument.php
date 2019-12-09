@@ -19,7 +19,6 @@ class DOMDocument extends \DOMDocument
         'form'   => ['action'],
         'iframe' => ['src'],
         'img'    => ['src', 'srcset', 'data-src'],
-        'link'   => ['href'],
         'object' => ['data'],
         'param'  => ['value'],
         'script' => ['src'],
@@ -73,8 +72,33 @@ class DOMDocument extends \DOMDocument
                 }
             }
         }
-
+        
+        $links=$this->extractLinksTags();
+        if (count($links)) $mixedContentUrls=array_merge($mixedContentUrls,$links);
+        
         // Return found URLs
         return $mixedContentUrls;
     }
+
+    public function extractLinksTags()
+    {
+        $mixedContentUrls = [];
+        foreach ($this->getElementsByTagName("link") as $el) {
+            // skip <link tag whose "rel" attribute is "profile" or "alternate": they are not included by browsers in the page.
+            if ($el->hasAttribute("rel")) {
+                $rel = $el->getAttribute("rel");
+                if ($rel=="profile" || $rel=="alternate") continue;
+            }
+            if ($el->hasAttribute("href")) {
+                $url = $el->getAttribute($attribute);
+                if (stripos($url, 'http://') !== false) {
+                    $mixedContentUrls[] = $url;
+                }
+            }
+        }
+        
+        // Return found URLs
+        return $mixedContentUrls;
+    }
+
 }
